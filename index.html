@@ -1,0 +1,387 @@
+<! DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>AI CyberGuard - Dashboard</title>
+    
+    <!-- Google Fonts -->
+    <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;500;600;700&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
+    
+    <!-- Font Awesome Icons -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    
+    <!-- Main CSS - NO SPACES in filename -->
+    <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+    <!-- Background Animation -->
+    <div class="bg-animation">
+        <div class="cyber-grid"></div>
+        <div class="floating-particles" id="particles"></div>
+        <div class="pulse-rings">
+            <div class="ring ring-1"></div>
+            <div class="ring ring-2"></div>
+            <div class="ring ring-3"></div>
+        </div>
+    </div>
+
+    <div class="dashboard-container">
+        <!-- Sidebar -->
+        <aside class="sidebar">
+            <div class="logo">
+                <div class="logo-icon">
+                    <i class="fas fa-shield-halved"></i>
+                    <div class="logo-pulse"></div>
+                </div>
+                <span class="logo-text">CyberGuard</span>
+            </div>
+
+            <nav class="nav-menu">
+                <a href="index.html" class="nav-item active">
+                    <div class="nav-icon"><i class="fas fa-th-large"></i></div>
+                    <span>Dashboard</span>
+                    <div class="nav-indicator"></div>
+                </a>
+                <a href="live-monitor.html" class="nav-item">
+                    <div class="nav-icon"><i class="fas fa-satellite-dish"></i></div>
+                    <span>Live Monitor</span>
+                    <div class="live-dot"></div>
+                </a>
+                <a href="static-analysis.html" class="nav-item">
+                    <div class="nav-icon"><i class="fas fa-file-import"></i></div>
+                    <span>Static Analysis</span>
+                </a>
+                <a href="ai-agents.html" class="nav-item">
+                    <div class="nav-icon"><i class="fas fa-robot"></i></div>
+                    <span>AI Agents</span>
+                    <span class="nav-badge">12</span>
+                </a>
+                <a href="threat-center.html" class="nav-item">
+                    <div class="nav-icon"><i class="fas fa-crosshairs"></i></div>
+                    <span>Threat Center</span>
+                </a>
+                <a href="analytics.html" class="nav-item">
+                    <div class="nav-icon"><i class="fas fa-chart-line"></i></div>
+                    <span>Analytics</span>
+                </a>
+
+                <a href="reports.html" class="nav-item">
+                <div class="nav-icon"><i class="fas fa-file-alt"></i></div>
+                <span>Reports</span>
+                </a>
+
+                <a href="settings.html" class="nav-item">
+                    <div class="nav-icon"><i class="fas fa-cogs"></i></div>
+                    <span>Settings</span>
+                </a>
+            </nav>
+
+            <div class="sidebar-footer">
+                <a href="settings.html" class="nav-item">
+                    <div class="nav-icon"><i class="fas fa-cog"></i></div>
+                    <span>Settings</span>
+                </a>
+                <div class="system-status">
+                    <div class="status-indicator"></div>
+                    <span>System Online</span>
+                </div>
+            </div>
+        </aside>
+
+        <!-- Main Content -->
+        <main class="main-content">
+            <!-- Header -->
+            <header class="header">
+                <div class="header-left">
+                    <div class="breadcrumb">
+                        <span class="bc-item">Home</span>
+                        <i class="fas fa-chevron-right"></i>
+                        <span class="bc-item active">Dashboard</span>
+                    </div>
+                    <h1 class="page-title">
+                        <span class="title-icon"><i class="fas fa-shield-virus"></i></span>
+                        Threat Intelligence Overview
+                    </h1>
+                </div>
+                <div class="header-right">
+                    <div class="search-box">
+                        <i class="fas fa-search"></i>
+                        <input type="text" placeholder="Search...">
+                        <kbd>⌘K</kbd>
+                    </div>
+                    <div class="header-actions">
+                        <button class="action-btn">
+                            <i class="fas fa-bell"></i>
+                            <span class="notif-badge">5</span>
+                        </button>
+                        <div class="user-profile">
+                            <div class="avatar">
+                                <img src="https://api.dicebear.com/7.x/avataaars/svg? seed=Tanush" alt="User">
+                                <div class="avatar-status"></div>
+                            </div>
+                            <div class="user-info">
+                                <span class="user-name">Tanush</span>
+                                <span class="user-role">Admin</span>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </header>
+
+            <!-- Dashboard Content -->
+            <div class="dashboard-content">
+                <!-- Threat Banner -->
+                <div class="threat-banner">
+                    <div class="threat-level-display">
+                        <div class="threat-hexagon">
+                            <div class="hex-inner">
+                                <span class="threat-value">67</span>
+                                <span class="threat-label">THREAT</span>
+                            </div>
+                            <svg class="hex-progress" viewBox="0 0 100 100">
+                                <circle class="hex-bg" cx="50" cy="50" r="45"/>
+                                <circle class="hex-fill" cx="50" cy="50" r="45"/>
+                            </svg>
+                        </div>
+                        <div class="threat-info">
+                            <h2>ELEVATED THREAT LEVEL</h2>
+                            <p>Multiple suspicious activities detected</p>
+                            <div class="threat-actions">
+                                <button class="btn-glow"><i class="fas fa-eye"></i> View Details</button>
+                                <button class="btn-outline"><i class="fas fa-shield-alt"></i> Activate Defense</button>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="threat-stats">
+                        <div class="threat-stat">
+                            <i class="fas fa-bug"></i>
+                            <div>
+                                <span class="stat-value">23</span>
+                                <span class="stat-label">Active Threats</span>
+                            </div>
+                        </div>
+                        <div class="threat-stat">
+                            <i class="fas fa-shield-alt"></i>
+                            <div>
+                                <span class="stat-value">1,247</span>
+                                <span class="stat-label">Blocked Today</span>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Stats Grid -->
+                <div class="stats-grid">
+                    <div class="stat-card" data-type="attacks">
+                        <div class="stat-icon"><i class="fas fa-skull-crossbones"></i></div>
+                        <div class="stat-content">
+                            <span class="stat-number" data-count="2847">0</span>
+                            <span class="stat-title">Total Attacks</span>
+                            <div class="stat-trend up">
+                                <i class="fas fa-arrow-up"></i>
+                                <span>12. 5%</span>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="stat-card" data-type="blocked">
+                        <div class="stat-icon"><i class="fas fa-ban"></i></div>
+                        <div class="stat-content">
+                            <span class="stat-number" data-count="2634">0</span>
+                            <span class="stat-title">Blocked</span>
+                            <div class="stat-trend up">
+                                <i class="fas fa-arrow-up"></i>
+                                <span>98.2%</span>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="stat-card" data-type="response">
+                        <div class="stat-icon"><i class="fas fa-bolt"></i></div>
+                        <div class="stat-content">
+                            <span class="stat-number">0.3<small>s</small></span>
+                            <span class="stat-title">Response Time</span>
+                            <div class="stat-trend down">
+                                <i class="fas fa-arrow-down"></i>
+                                <span>15%</span>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="stat-card" data-type="accuracy">
+                        <div class="stat-icon"><i class="fas fa-bullseye"></i></div>
+                        <div class="stat-content">
+                            <span class="stat-number">98.7<small>%</small></span>
+                            <span class="stat-title">AI Accuracy</span>
+                            <div class="stat-trend up">
+                                <i class="fas fa-arrow-up"></i>
+                                <span>+2.1%</span>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Main Grid -->
+                <div class="main-grid">
+                    <!-- World Map -->
+                    <div class="card card-map">
+                        <div class="card-header">
+                            <h3><i class="fas fa-globe-americas"></i> Global Threat Map</h3>
+                            <div class="card-actions">
+                                <button class="card-btn active">Live</button>
+                                <button class="card-btn">24h</button>
+                            </div>
+                        </div>
+                        <div class="card-body">
+                            <div class="world-map">
+                                <svg viewBox="0 0 1000 500" id="mapSvg">
+                                    <path class="continent" d="M150,120 Q200,100 250,110 L280,130 Q300,150 280,180 L250,200 Q200,220 170,200 L140,170 Q130,140 150,120Z"/>
+                                    <path class="continent" d="M300,100 Q400,80 500,90 L550,120 Q600,150 580,200 L520,250 Q450,280 380,260 L320,220 Q280,180 300,100Z"/>
+                                    <path class="continent" d="M520,180 Q580,160 650,170 L720,200 Q780,230 760,290 L700,340 Q620,380 560,350 L500,300 Q480,250 520,180Z"/>
+                                    <path class="continent" d="M200,250 Q280,230 340,260 L380,300 Q400,350 360,400 L280,420 Q200,430 160,380 L150,320 Q160,270 200,250Z"/>
+                                    <path class="continent" d="M750,280 Q820,260 880,290 L920,340 Q950,400 900,450 L820,470 Q740,480 700,430 L680,370 Q700,310 750,280Z"/>
+                                </svg>
+                                <div class="attack-points" id="attackPoints"></div>
+                            </div>
+                            <div class="map-legend">
+                                <div class="legend-item"><span class="dot critical"></span> Critical</div>
+                                <div class="legend-item"><span class="dot high"></span> High</div>
+                                <div class="legend-item"><span class="dot medium"></span> Medium</div>
+                                <div class="legend-item"><span class="dot low"></span> Low</div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- AI Agents -->
+                    <div class="card card-agents">
+                        <div class="card-header">
+                            <h3><i class="fas fa-robot"></i> AI Agents</h3>
+                            <button class="btn-add"><i class="fas fa-plus"></i></button>
+                        </div>
+                        <div class="card-body">
+                            <div class="agents-grid">
+                                <div class="agent-card">
+                                    <div class="agent-avatar">
+                                        <div class="avatar-ring"></div>
+                                        <i class="fas fa-eye"></i>
+                                    </div>
+                                    <div class="agent-info">
+                                        <h4>Sentinel-01</h4>
+                                        <span class="agent-type">Network Monitor</span>
+                                    </div>
+                                    <span class="status-badge online">Active</span>
+                                </div>
+                                <div class="agent-card">
+                                    <div class="agent-avatar hunting">
+                                        <div class="avatar-ring"></div>
+                                        <i class="fas fa-crosshairs"></i>
+                                    </div>
+                                    <div class="agent-info">
+                                        <h4>Hunter-02</h4>
+                                        <span class="agent-type">Threat Hunter</span>
+                                    </div>
+                                    <span class="status-badge hunting">Hunting</span>
+                                </div>
+                                <div class="agent-card">
+                                    <div class="agent-avatar learning">
+                                        <div class="avatar-ring"></div>
+                                        <i class="fas fa-brain"></i>
+                                    </div>
+                                    <div class="agent-info">
+                                        <h4>Neural-03</h4>
+                                        <span class="agent-type">Anomaly Detector</span>
+                                    </div>
+                                    <span class="status-badge learning">Learning</span>
+                                </div>
+                                <div class="agent-card">
+                                    <div class="agent-avatar defense">
+                                        <div class="avatar-ring"></div>
+                                        <i class="fas fa-shield-alt"></i>
+                                    </div>
+                                    <div class="agent-info">
+                                        <h4>Guardian-04</h4>
+                                        <span class="agent-type">Active Defense</span>
+                                    </div>
+                                    <span class="status-badge online">Active</span>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Threats -->
+                    <div class="card card-threats">
+                        <div class="card-header">
+                            <h3><i class="fas fa-exclamation-triangle"></i> Recent Threats</h3>
+                        </div>
+                        <div class="card-body">
+                            <div class="threats-list">
+                                <div class="threat-item critical">
+                                    <div class="threat-severity"><i class="fas fa-radiation"></i></div>
+                                    <div class="threat-details">
+                                        <h4>SQL Injection</h4>
+                                        <p>Database targeted</p>
+                                    </div>
+                                    <span class="action-badge blocked">Blocked</span>
+                                </div>
+                                <div class="threat-item high">
+                                    <div class="threat-severity"><i class="fas fa-user-secret"></i></div>
+                                    <div class="threat-details">
+                                        <h4>Brute Force</h4>
+                                        <p>Login attempts</p>
+                                    </div>
+                                    <span class="action-badge investigating">Investigating</span>
+                                </div>
+                                <div class="threat-item medium">
+                                    <div class="threat-severity"><i class="fas fa-network-wired"></i></div>
+                                    <div class="threat-details">
+                                        <h4>Port Scan</h4>
+                                        <p>External IP</p>
+                                    </div>
+                                    <span class="action-badge monitoring">Monitoring</span>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Timeline -->
+                    <div class="card card-timeline">
+                        <div class="card-header">
+                            <h3><i class="fas fa-stream"></i> Activity Feed</h3>
+                            <div class="live-indicator">
+                                <span class="pulse"></span>
+                                Live
+                            </div>
+                        </div>
+                        <div class="card-body">
+                            <div class="activity-feed" id="activityFeed">
+                                <div class="activity-item">
+                                    <div class="activity-icon success"><i class="fas fa-shield-alt"></i></div>
+                                    <div class="activity-content">
+                                        <p><strong>Agent Sentinel-01</strong> blocked suspicious connection</p>
+                                        <span class="activity-time">Just now</span>
+                                    </div>
+                                </div>
+                                <div class="activity-item">
+                                    <div class="activity-icon warning"><i class="fas fa-exclamation"></i></div>
+                                    <div class="activity-content">
+                                        <p><strong>Anomaly detected</strong> in traffic pattern</p>
+                                        <span class="activity-time">2 min ago</span>
+                                    </div>
+                                </div>
+                                <div class="activity-item">
+                                    <div class="activity-icon info"><i class="fas fa-sync"></i></div>
+                                    <div class="activity-content">
+                                        <p><strong>Database</strong> updated with new signatures</p>
+                                        <span class="activity-time">5 min ago</span>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </main>
+    </div>
+
+    <!-- JavaScript - NO SPACES in filename -->
+    <script src="script.js"></script>
+</body>
+</html>

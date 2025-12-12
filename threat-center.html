@@ -1,0 +1,870 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Threat Center - CyberGuard</title>
+    
+    <!-- Google Fonts -->
+    <link href="https://fonts.googleapis.com/css2? family=Outfit:wght@300;400;500;600;700&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
+    
+    <!-- Font Awesome Icons -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    
+    <!-- CSS Files -->
+    <link rel="stylesheet" href="styles.css">
+    <link rel="stylesheet" href="threat-center.css">
+</head>
+<body>
+    <!-- Background Animation -->
+    <div class="bg-animation">
+        <div class="cyber-grid"></div>
+        <div class="floating-particles" id="particles"></div>
+    </div>
+
+    <div class="dashboard-container">
+        <!-- Sidebar -->
+        <aside class="sidebar">
+            <div class="logo">
+                <div class="logo-icon">
+                    <i class="fas fa-shield-halved"></i>
+                    <div class="logo-pulse"></div>
+                </div>
+                <span class="logo-text">CyberGuard</span>
+            </div>
+
+            <nav class="nav-menu">
+                <a href="index.html" class="nav-item">
+                    <div class="nav-icon"><i class="fas fa-th-large"></i></div>
+                    <span>Dashboard</span>
+                </a>
+                <a href="live-monitor. html" class="nav-item">
+                    <div class="nav-icon"><i class="fas fa-satellite-dish"></i></div>
+                    <span>Live Monitor</span>
+                    <div class="live-dot"></div>
+                </a>
+                <a href="static-analysis.html" class="nav-item">
+                    <div class="nav-icon"><i class="fas fa-file-import"></i></div>
+                    <span>Static Analysis</span>
+                </a>
+                <a href="ai-agents.html" class="nav-item">
+                    <div class="nav-icon"><i class="fas fa-robot"></i></div>
+                    <span>AI Agents</span>
+                    <span class="nav-badge">12</span>
+                </a>
+                <a href="threat-center.html" class="nav-item active">
+                    <div class="nav-icon"><i class="fas fa-crosshairs"></i></div>
+                    <span>Threat Center</span>
+                    <div class="nav-indicator"></div>
+                </a>
+                <a href="#" class="nav-item">
+                    <div class="nav-icon"><i class="fas fa-chart-line"></i></div>
+                    <span>Analytics</span>
+                </a>
+                <a href="#" class="nav-item">
+                    <div class="nav-icon"><i class="fas fa-file-alt"></i></div>
+                    <span>Reports</span>
+                </a>
+            </nav>
+
+            <div class="sidebar-footer">
+                <a href="#" class="nav-item">
+                    <div class="nav-icon"><i class="fas fa-cog"></i></div>
+                    <span>Settings</span>
+                </a>
+                <div class="system-status">
+                    <div class="status-indicator"></div>
+                    <span>System Online</span>
+                </div>
+            </div>
+        </aside>
+
+        <!-- Main Content -->
+        <main class="main-content">
+            <!-- Header -->
+            <header class="header">
+                <div class="header-left">
+                    <div class="breadcrumb">
+                        <span class="bc-item">Home</span>
+                        <i class="fas fa-chevron-right"></i>
+                        <span class="bc-item active">Threat Center</span>
+                    </div>
+                    <h1 class="page-title">
+                        <span class="title-icon"><i class="fas fa-crosshairs"></i></span>
+                        Threat Intelligence Center
+                    </h1>
+                </div>
+                <div class="header-right">
+                    <div class="threat-alert-banner">
+                        <i class="fas fa-exclamation-triangle"></i>
+                        <span><strong>3</strong> Critical Threats Require Attention</span>
+                    </div>
+                    <div class="header-actions">
+                        <button class="action-btn">
+                            <i class="fas fa-bell"></i>
+                            <span class="notif-badge">8</span>
+                        </button>
+                        <div class="user-profile">
+                            <div class="avatar">
+                                <img src="https://api.dicebear.com/7. x/avataaars/svg? seed=Tanush" alt="User">
+                                <div class="avatar-status"></div>
+                            </div>
+                            <div class="user-info">
+                                <span class="user-name">Tanush</span>
+                                <span class="user-role">Admin</span>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </header>
+
+            <!-- Threat Center Content -->
+            <div class="threat-content">
+                <!-- Threat Overview Stats -->
+                <div class="threat-overview">
+                    <div class="threat-stat-card critical">
+                        <div class="threat-stat-icon">
+                            <i class="fas fa-radiation"></i>
+                        </div>
+                        <div class="threat-stat-info">
+                            <span class="threat-stat-value">12</span>
+                            <span class="threat-stat-label">Critical</span>
+                        </div>
+                        <div class="threat-stat-trend up">
+                            <i class="fas fa-arrow-up"></i> +3
+                        </div>
+                    </div>
+
+                    <div class="threat-stat-card high">
+                        <div class="threat-stat-icon">
+                            <i class="fas fa-exclamation-circle"></i>
+                        </div>
+                        <div class="threat-stat-info">
+                            <span class="threat-stat-value">28</span>
+                            <span class="threat-stat-label">High</span>
+                        </div>
+                        <div class="threat-stat-trend up">
+                            <i class="fas fa-arrow-up"></i> +5
+                        </div>
+                    </div>
+
+                    <div class="threat-stat-card medium">
+                        <div class="threat-stat-icon">
+                            <i class="fas fa-exclamation-triangle"></i>
+                        </div>
+                        <div class="threat-stat-info">
+                            <span class="threat-stat-value">45</span>
+                            <span class="threat-stat-label">Medium</span>
+                        </div>
+                        <div class="threat-stat-trend down">
+                            <i class="fas fa-arrow-down"></i> -2
+                        </div>
+                    </div>
+
+                    <div class="threat-stat-card low">
+                        <div class="threat-stat-icon">
+                            <i class="fas fa-info-circle"></i>
+                        </div>
+                        <div class="threat-stat-info">
+                            <span class="threat-stat-value">67</span>
+                            <span class="threat-stat-label">Low</span>
+                        </div>
+                        <div class="threat-stat-trend down">
+                            <i class="fas fa-arrow-down"></i> -8
+                        </div>
+                    </div>
+
+                    <div class="threat-stat-card resolved">
+                        <div class="threat-stat-icon">
+                            <i class="fas fa-check-circle"></i>
+                        </div>
+                        <div class="threat-stat-info">
+                            <span class="threat-stat-value">2,847</span>
+                            <span class="threat-stat-label">Resolved</span>
+                        </div>
+                        <div class="threat-stat-trend">
+                            <span>Today:  156</span>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Main Grid -->
+                <div class="threat-grid">
+                    <!-- Threats Table -->
+                    <div class="threats-table-section">
+                        <div class="section-header">
+                            <h3><i class="fas fa-list"></i> Active Threats</h3>
+                            <div class="table-actions">
+                                <div class="search-box-sm">
+                                    <i class="fas fa-search"></i>
+                                    <input type="text" placeholder="Search threats..." id="threatSearch">
+                                </div>
+                                <div class="filter-dropdown">
+                                    <button class="filter-btn" id="filterBtn">
+                                        <i class="fas fa-filter"></i>
+                                        Filter
+                                        <i class="fas fa-chevron-down"></i>
+                                    </button>
+                                    <div class="filter-menu" id="filterMenu">
+                                        <div class="filter-group">
+                                            <label>Severity</label>
+                                            <div class="filter-options">
+                                                <label><input type="checkbox" checked> Critical</label>
+                                                <label><input type="checkbox" checked> High</label>
+                                                <label><input type="checkbox" checked> Medium</label>
+                                                <label><input type="checkbox"> Low</label>
+                                            </div>
+                                        </div>
+                                        <div class="filter-group">
+                                            <label>Status</label>
+                                            <div class="filter-options">
+                                                <label><input type="checkbox" checked> Active</label>
+                                                <label><input type="checkbox" checked> Investigating</label>
+                                                <label><input type="checkbox"> Contained</label>
+                                                <label><input type="checkbox"> Resolved</label>
+                                            </div>
+                                        </div>
+                                        <div class="filter-group">
+                                            <label>Type</label>
+                                            <div class="filter-options">
+                                                <label><input type="checkbox" checked> Malware</label>
+                                                <label><input type="checkbox" checked> Intrusion</label>
+                                                <label><input type="checkbox" checked> Data Exfil</label>
+                                                <label><input type="checkbox" checked> DDoS</label>
+                                            </div>
+                                        </div>
+                                        <button class="apply-filter-btn">Apply Filters</button>
+                                    </div>
+                                </div>
+                                <button class="export-btn">
+                                    <i class="fas fa-download"></i>
+                                    Export
+                                </button>
+                            </div>
+                        </div>
+
+                        <div class="threats-table-container">
+                            <table class="threats-table">
+                                <thead>
+                                    <tr>
+                                        <th>
+                                            <input type="checkbox" id="selectAll">
+                                        </th>
+                                        <th>Threat ID</th>
+                                        <th>Type</th>
+                                        <th>Source</th>
+                                        <th>Target</th>
+                                        <th>Severity</th>
+                                        <th>Status</th>
+                                        <th>Detected</th>
+                                        <th>Actions</th>
+                                    </tr>
+                                </thead>
+                                <tbody id="threatsTableBody">
+                                    <tr class="threat-row" data-severity="critical">
+                                        <td><input type="checkbox"></td>
+                                        <td>
+                                            <span class="threat-id">#THR-2024-001</span>
+                                        </td>
+                                        <td>
+                                            <div class="threat-type">
+                                                <i class="fas fa-bug"></i>
+                                                <span>Ransomware</span>
+                                            </div>
+                                        </td>
+                                        <td>
+                                            <div class="source-info">
+                                                <img src="https://flagcdn.com/16x12/ru. png" alt="RU">
+                                                <span>185.234.72.15</span>
+                                            </div>
+                                        </td>
+                                        <td>
+                                            <span class="target-info">File Server 01</span>
+                                        </td>
+                                        <td>
+                                            <span class="severity-badge critical">Critical</span>
+                                        </td>
+                                        <td>
+                                            <span class="status-badge active">
+                                                <span class="status-dot"></span>
+                                                Active
+                                            </span>
+                                        </td>
+                                        <td>
+                                            <span class="time-ago">2 min ago</span>
+                                        </td>
+                                        <td>
+                                            <div class="row-actions">
+                                                <button class="row-action-btn" title="Investigate">
+                                                    <i class="fas fa-search"></i>
+                                                </button>
+                                                <button class="row-action-btn" title="Contain">
+                                                    <i class="fas fa-shield-alt"></i>
+                                                </button>
+                                                <button class="row-action-btn" title="Block">
+                                                    <i class="fas fa-ban"></i>
+                                                </button>
+                                            </div>
+                                        </td>
+                                    </tr>
+
+                                    <tr class="threat-row" data-severity="critical">
+                                        <td><input type="checkbox"></td>
+                                        <td>
+                                            <span class="threat-id">#THR-2024-002</span>
+                                        </td>
+                                        <td>
+                                            <div class="threat-type">
+                                                <i class="fas fa-user-secret"></i>
+                                                <span>APT Attack</span>
+                                            </div>
+                                        </td>
+                                        <td>
+                                            <div class="source-info">
+                                                <img src="https://flagcdn.com/16x12/cn.png" alt="CN">
+                                                <span>45.33.32.156</span>
+                                            </div>
+                                        </td>
+                                        <td>
+                                            <span class="target-info">Domain Controller</span>
+                                        </td>
+                                        <td>
+                                            <span class="severity-badge critical">Critical</span>
+                                        </td>
+                                        <td>
+                                            <span class="status-badge investigating">
+                                                <span class="status-dot"></span>
+                                                Investigating
+                                            </span>
+                                        </td>
+                                        <td>
+                                            <span class="time-ago">5 min ago</span>
+                                        </td>
+                                        <td>
+                                            <div class="row-actions">
+                                                <button class="row-action-btn" title="Investigate">
+                                                    <i class="fas fa-search"></i>
+                                                </button>
+                                                <button class="row-action-btn" title="Contain">
+                                                    <i class="fas fa-shield-alt"></i>
+                                                </button>
+                                                <button class="row-action-btn" title="Block">
+                                                    <i class="fas fa-ban"></i>
+                                                </button>
+                                            </div>
+                                        </td>
+                                    </tr>
+
+                                    <tr class="threat-row" data-severity="high">
+                                        <td><input type="checkbox"></td>
+                                        <td>
+                                            <span class="threat-id">#THR-2024-003</span>
+                                        </td>
+                                        <td>
+                                            <div class="threat-type">
+                                                <i class="fas fa-key"></i>
+                                                <span>Brute Force</span>
+                                            </div>
+                                        </td>
+                                        <td>
+                                            <div class="source-info">
+                                                <img src="https://flagcdn.com/16x12/br.png" alt="BR">
+                                                <span>177.124.56.89</span>
+                                            </div>
+                                        </td>
+                                        <td>
+                                            <span class="target-info">SSH Gateway</span>
+                                        </td>
+                                        <td>
+                                            <span class="severity-badge high">High</span>
+                                        </td>
+                                        <td>
+                                            <span class="status-badge active">
+                                                <span class="status-dot"></span>
+                                                Active
+                                            </span>
+                                        </td>
+                                        <td>
+                                            <span class="time-ago">12 min ago</span>
+                                        </td>
+                                        <td>
+                                            <div class="row-actions">
+                                                <button class="row-action-btn" title="Investigate">
+                                                    <i class="fas fa-search"></i>
+                                                </button>
+                                                <button class="row-action-btn" title="Contain">
+                                                    <i class="fas fa-shield-alt"></i>
+                                                </button>
+                                                <button class="row-action-btn" title="Block">
+                                                    <i class="fas fa-ban"></i>
+                                                </button>
+                                            </div>
+                                        </td>
+                                    </tr>
+
+                                    <tr class="threat-row" data-severity="high">
+                                        <td><input type="checkbox"></td>
+                                        <td>
+                                            <span class="threat-id">#THR-2024-004</span>
+                                        </td>
+                                        <td>
+                                            <div class="threat-type">
+                                                <i class="fas fa-database"></i>
+                                                <span>SQL Injection</span>
+                                            </div>
+                                        </td>
+                                        <td>
+                                            <div class="source-info">
+                                                <img src="https://flagcdn.com/16x12/ua.png" alt="UA">
+                                                <span>91.234.45.67</span>
+                                            </div>
+                                        </td>
+                                        <td>
+                                            <span class="target-info">Web Application</span>
+                                        </td>
+                                        <td>
+                                            <span class="severity-badge high">High</span>
+                                        </td>
+                                        <td>
+                                            <span class="status-badge contained">
+                                                <span class="status-dot"></span>
+                                                Contained
+                                            </span>
+                                        </td>
+                                        <td>
+                                            <span class="time-ago">25 min ago</span>
+                                        </td>
+                                        <td>
+                                            <div class="row-actions">
+                                                <button class="row-action-btn" title="Investigate">
+                                                    <i class="fas fa-search"></i>
+                                                </button>
+                                                <button class="row-action-btn" title="Contain">
+                                                    <i class="fas fa-shield-alt"></i>
+                                                </button>
+                                                <button class="row-action-btn" title="Block">
+                                                    <i class="fas fa-ban"></i>
+                                                </button>
+                                            </div>
+                                        </td>
+                                    </tr>
+
+                                    <tr class="threat-row" data-severity="medium">
+                                        <td><input type="checkbox"></td>
+                                        <td>
+                                            <span class="threat-id">#THR-2024-005</span>
+                                        </td>
+                                        <td>
+                                            <div class="threat-type">
+                                                <i class="fas fa-network-wired"></i>
+                                                <span>Port Scan</span>
+                                            </div>
+                                        </td>
+                                        <td>
+                                            <div class="source-info">
+                                                <img src="https://flagcdn.com/16x12/de.png" alt="DE">
+                                                <span>89.45.67.123</span>
+                                            </div>
+                                        </td>
+                                        <td>
+                                            <span class="target-info">Firewall</span>
+                                        </td>
+                                        <td>
+                                            <span class="severity-badge medium">Medium</span>
+                                        </td>
+                                        <td>
+                                            <span class="status-badge investigating">
+                                                <span class="status-dot"></span>
+                                                Investigating
+                                            </span>
+                                        </td>
+                                        <td>
+                                            <span class="time-ago">45 min ago</span>
+                                        </td>
+                                        <td>
+                                            <div class="row-actions">
+                                                <button class="row-action-btn" title="Investigate">
+                                                    <i class="fas fa-search"></i>
+                                                </button>
+                                                <button class="row-action-btn" title="Contain">
+                                                    <i class="fas fa-shield-alt"></i>
+                                                </button>
+                                                <button class="row-action-btn" title="Block">
+                                                    <i class="fas fa-ban"></i>
+                                                </button>
+                                            </div>
+                                        </td>
+                                    </tr>
+
+                                    <tr class="threat-row" data-severity="medium">
+                                        <td><input type="checkbox"></td>
+                                        <td>
+                                            <span class="threat-id">#THR-2024-006</span>
+                                        </td>
+                                        <td>
+                                            <div class="threat-type">
+                                                <i class="fas fa-envelope"></i>
+                                                <span>Phishing</span>
+                                            </div>
+                                        </td>
+                                        <td>
+                                            <div class="source-info">
+                                                <img src="https://flagcdn.com/16x12/ng.png" alt="NG">
+                                                <span>phishing-domain.com</span>
+                                            </div>
+                                        </td>
+                                        <td>
+                                            <span class="target-info">Email Gateway</span>
+                                        </td>
+                                        <td>
+                                            <span class="severity-badge medium">Medium</span>
+                                        </td>
+                                        <td>
+                                            <span class="status-badge contained">
+                                                <span class="status-dot"></span>
+                                                Contained
+                                            </span>
+                                        </td>
+                                        <td>
+                                            <span class="time-ago">1 hour ago</span>
+                                        </td>
+                                        <td>
+                                            <div class="row-actions">
+                                                <button class="row-action-btn" title="Investigate">
+                                                    <i class="fas fa-search"></i>
+                                                </button>
+                                                <button class="row-action-btn" title="Contain">
+                                                    <i class="fas fa-shield-alt"></i>
+                                                </button>
+                                                <button class="row-action-btn" title="Block">
+                                                    <i class="fas fa-ban"></i>
+                                                </button>
+                                            </div>
+                                        </td>
+                                    </tr>
+                                </tbody>
+                            </table>
+                        </div>
+
+                        <!-- Pagination -->
+                        <div class="table-pagination">
+                            <div class="pagination-info">
+                                Showing <strong>1-6</strong> of <strong>152</strong> threats
+                            </div>
+                            <div class="pagination-controls">
+                                <button class="pagination-btn" disabled>
+                                    <i class="fas fa-chevron-left"></i>
+                                </button>
+                                <button class="pagination-btn active">1</button>
+                                <button class="pagination-btn">2</button>
+                                <button class="pagination-btn">3</button>
+                                <span class="pagination-dots">... </span>
+                                <button class="pagination-btn">26</button>
+                                <button class="pagination-btn">
+                                    <i class="fas fa-chevron-right"></i>
+                                </button>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Right Sidebar -->
+                    <div class="threat-sidebar">
+                        <!-- Threat Intelligence -->
+                        <div class="sidebar-card">
+                            <div class="sidebar-card-header">
+                                <h4><i class="fas fa-globe"></i> Threat Intel</h4>
+                            </div>
+                            <div class="intel-content">
+                                <div class="intel-map">
+                                    <div class="world-mini-map">
+                                        <svg viewBox="0 0 200 100" id="miniMap">
+                                            <path class="continent" d="M30,25 Q50,20 70,25 L75,35 Q80,45 70,55 L50,60 Q35,58 30,45 Z"/>
+                                            <path class="continent" d="M80,20 Q110,15 140,22 L150,35 Q155,50 145,65 L115,75 Q85,78 75,60 L78,40 Z"/>
+                                            <path class="continent" d="M145,35 Q165,30 185,40 L190,55 Q188,70 175,80 L155,82 Q140,78 142,60 Z"/>
+                                        </svg>
+                                        <div class="attack-dots" id="attackDots"></div>
+                                    </div>
+                                </div>
+                                <div class="top-sources">
+                                    <h5>Top Attack Sources</h5>
+                                    <div class="source-list">
+                                        <div class="source-item">
+                                            <img src="https://flagcdn.com/20x15/ru.png" alt="RU">
+                                            <span class="source-country">Russia</span>
+                                            <span class="source-count">2,847</span>
+                                            <div class="source-bar">
+                                                <div class="source-fill" style="width:  85%"></div>
+                                            </div>
+                                        </div>
+                                        <div class="source-item">
+                                            <img src="https://flagcdn.com/20x15/cn.png" alt="CN">
+                                            <span class="source-country">China</span>
+                                            <span class="source-count">2,156</span>
+                                            <div class="source-bar">
+                                                <div class="source-fill" style="width: 72%"></div>
+                                            </div>
+                                        </div>
+                                        <div class="source-item">
+                                            <img src="https://flagcdn.com/20x15/kp.png" alt="KP">
+                                            <span class="source-country">North Korea</span>
+                                            <span class="source-count">1,423</span>
+                                            <div class="source-bar">
+                                                <div class="source-fill" style="width: 55%"></div>
+                                            </div>
+                                        </div>
+                                        <div class="source-item">
+                                            <img src="https://flagcdn.com/20x15/ir.png" alt="IR">
+                                            <span class="source-country">Iran</span>
+                                            <span class="source-count">987</span>
+                                            <div class="source-bar">
+                                                <div class="source-fill" style="width: 38%"></div>
+                                            </div>
+                                        </div>
+                                        <div class="source-item">
+                                            <img src="https://flagcdn.com/20x15/br.png" alt="BR">
+                                            <span class="source-country">Brazil</span>
+                                            <span class="source-count">654</span>
+                                            <div class="source-bar">
+                                                <div class="source-fill" style="width: 25%"></div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- Attack Types -->
+                        <div class="sidebar-card">
+                            <div class="sidebar-card-header">
+                                <h4><i class="fas fa-chart-pie"></i> Attack Types</h4>
+                            </div>
+                            <div class="attack-types-content">
+                                <div class="attack-type-item">
+                                    <div class="attack-type-info">
+                                        <div class="attack-type-icon malware">
+                                            <i class="fas fa-bug"></i>
+                                        </div>
+                                        <div class="attack-type-details">
+                                            <span class="attack-type-name">Malware</span>
+                                            <span class="attack-type-count">1,245 attacks</span>
+                                        </div>
+                                    </div>
+                                    <div class="attack-type-percent">32%</div>
+                                </div>
+
+                                <div class="attack-type-item">
+                                    <div class="attack-type-info">
+                                        <div class="attack-type-icon phishing">
+                                            <i class="fas fa-fish"></i>
+                                        </div>
+                                        <div class="attack-type-details">
+                                            <span class="attack-type-name">Phishing</span>
+                                            <span class="attack-type-count">987 attacks</span>
+                                        </div>
+                                    </div>
+                                    <div class="attack-type-percent">25%</div>
+                                </div>
+
+                                <div class="attack-type-item">
+                                    <div class="attack-type-info">
+                                        <div class="attack-type-icon intrusion">
+                                            <i class="fas fa-door-open"></i>
+                                        </div>
+                                        <div class="attack-type-details">
+                                            <span class="attack-type-name">Intrusion</span>
+                                            <span class="attack-type-count">756 attacks</span>
+                                        </div>
+                                    </div>
+                                    <div class="attack-type-percent">19%</div>
+                                </div>
+
+                                <div class="attack-type-item">
+                                    <div class="attack-type-info">
+                                        <div class="attack-type-icon ddos">
+                                            <i class="fas fa-bolt"></i>
+                                        </div>
+                                        <div class="attack-type-details">
+                                            <span class="attack-type-name">DDoS</span>
+                                            <span class="attack-type-count">534 attacks</span>
+                                        </div>
+                                    </div>
+                                    <div class="attack-type-percent">14%</div>
+                                </div>
+
+                                <div class="attack-type-item">
+                                    <div class="attack-type-info">
+                                        <div class="attack-type-icon other">
+                                            <i class="fas fa-ellipsis-h"></i>
+                                        </div>
+                                        <div class="attack-type-details">
+                                            <span class="attack-type-name">Other</span>
+                                            <span class="attack-type-count">389 attacks</span>
+                                        </div>
+                                    </div>
+                                    <div class="attack-type-percent">10%</div>
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- Recent IOCs -->
+                        <div class="sidebar-card">
+                            <div class="sidebar-card-header">
+                                <h4><i class="fas fa-fingerprint"></i> Recent IOCs</h4>
+                                <a href="#" class="view-all-link">View All</a>
+                            </div>
+                            <div class="ioc-list">
+                                <div class="ioc-item">
+                                    <div class="ioc-type ip">IP</div>
+                                    <div class="ioc-value">185.234.72.15</div>
+                                    <button class="ioc-copy" title="Copy">
+                                        <i class="fas fa-copy"></i>
+                                    </button>
+                                </div>
+                                <div class="ioc-item">
+                                    <div class="ioc-type domain">DOMAIN</div>
+                                    <div class="ioc-value">malicious-c2.evil.com</div>
+                                    <button class="ioc-copy" title="Copy">
+                                        <i class="fas fa-copy"></i>
+                                    </button>
+                                </div>
+                                <div class="ioc-item">
+                                    <div class="ioc-type hash">MD5</div>
+                                    <div class="ioc-value">d41d8cd98f00b204... </div>
+                                    <button class="ioc-copy" title="Copy">
+                                        <i class="fas fa-copy"></i>
+                                    </button>
+                                </div>
+                                <div class="ioc-item">
+                                    <div class="ioc-type ip">IP</div>
+                                    <div class="ioc-value">45.33.32.156</div>
+                                    <button class="ioc-copy" title="Copy">
+                                        <i class="fas fa-copy"></i>
+                                    </button>
+                                </div>
+                                <div class="ioc-item">
+                                    <div class="ioc-type url">URL</div>
+                                    <div class="ioc-value">http://evil.com/gate. php</div>
+                                    <button class="ioc-copy" title="Copy">
+                                        <i class="fas fa-copy"></i>
+                                    </button>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </main>
+    </div>
+
+    <!-- Threat Detail Modal -->
+    <div class="modal-overlay" id="threatDetailModal">
+        <div class="modal threat-modal">
+            <div class="modal-header">
+                <div class="modal-title-section">
+                    <span class="severity-badge critical">Critical</span>
+                    <h3>#THR-2024-001 - Ransomware Attack</h3>
+                </div>
+                <button class="modal-close" id="closeDetailModal">
+                    <i class="fas fa-times"></i>
+                </button>
+            </div>
+            <div class="modal-body">
+                <div class="threat-detail-grid">
+                    <div class="detail-section">
+                        <h4><i class="fas fa-info-circle"></i> Overview</h4>
+                        <div class="detail-content">
+                            <div class="detail-row">
+                                <span class="detail-label">Type</span>
+                                <span class="detail-value">Ransomware (LockBit 3.0)</span>
+                            </div>
+                            <div class="detail-row">
+                                <span class="detail-label">Status</span>
+                                <span class="detail-value">
+                                    <span class="status-badge active"><span class="status-dot"></span> Active</span>
+                                </span>
+                            </div>
+                            <div class="detail-row">
+                                <span class="detail-label">First Seen</span>
+                                <span class="detail-value">Dec 11, 2024 10:30:45 AM</span>
+                            </div>
+                            <div class="detail-row">
+                                <span class="detail-label">Source IP</span>
+                                <span class="detail-value mono">185.234.72.15</span>
+                            </div>
+                            <div class="detail-row">
+                                <span class="detail-label">Target</span>
+                                <span class="detail-value">File Server 01 (192.168.1.50)</span>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="detail-section">
+                        <h4><i class="fas fa-crosshairs"></i> MITRE ATT&CK</h4>
+                        <div class="mitre-tags">
+                            <span class="mitre-tag">T1486 - Data Encrypted</span>
+                            <span class="mitre-tag">T1055 - Process Injection</span>
+                            <span class="mitre-tag">T1071 - C2 Communication</span>
+                            <span class="mitre-tag">T1547 - Boot Persistence</span>
+                        </div>
+                    </div>
+
+                    <div class="detail-section full-width">
+                        <h4><i class="fas fa-stream"></i> Attack Timeline</h4>
+                        <div class="attack-timeline">
+                            <div class="timeline-item">
+                                <div class="timeline-dot danger"></div>
+                                <div class="timeline-content">
+                                    <span class="timeline-time">10:30:45</span>
+                                    <span class="timeline-event">Initial access via phishing email</span>
+                                </div>
+                            </div>
+                            <div class="timeline-item">
+                                <div class="timeline-dot warning"></div>
+                                <div class="timeline-content">
+                                    <span class="timeline-time">10:31:12</span>
+                                    <span class="timeline-event">Malicious macro executed</span>
+                                </div>
+                            </div>
+                            <div class="timeline-item">
+                                <div class="timeline-dot warning"></div>
+                                <div class="timeline-content">
+                                    <span class="timeline-time">10:31:45</span>
+                                    <span class="timeline-event">Payload downloaded from C2</span>
+                                </div>
+                            </div>
+                            <div class="timeline-item">
+                                <div class="timeline-dot danger"></div>
+                                <div class="timeline-content">
+                                    <span class="timeline-time">10:32:00</span>
+                                    <span class="timeline-event">Ransomware execution started</span>
+                                </div>
+                            </div>
+                            <div class="timeline-item">
+                                <div class="timeline-dot info"></div>
+                                <div class="timeline-content">
+                                    <span class="timeline-time">10:32:05</span>
+                                    <span class="timeline-event">AI Agent detected anomaly</span>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="modal-footer">
+                <button class="btn-action secondary">
+                    <i class="fas fa-file-alt"></i> View Full Report
+                </button>
+                <button class="btn-action secondary">
+                    <i class="fas fa-shield-alt"></i> Contain Threat
+                </button>
+                <button class="btn-action primary danger">
+                    <i class="fas fa-ban"></i> Block & Quarantine
+                </button>
+            </div>
+        </div>
+    </div>
+
+    <!-- JavaScript -->
+    <script src="threat-center.js"></script>
+</body>
+</html>
