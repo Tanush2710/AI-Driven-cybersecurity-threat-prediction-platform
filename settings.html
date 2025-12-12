@@ -1,0 +1,999 @@
+<! DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Settings - CyberGuard</title>
+    
+    <!-- Google Fonts -->
+    <link href="https://fonts.googleapis.com/css2? family=Outfit: wght@300;400;500;600;700&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
+    
+    <!-- Font Awesome Icons -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    
+    <!-- CSS Files -->
+    <link rel="stylesheet" href="styles.css">
+    <link rel="stylesheet" href="settings.css">
+</head>
+<body>
+    <!-- Background Animation -->
+    <div class="bg-animation">
+        <div class="cyber-grid"></div>
+        <div class="floating-particles" id="particles"></div>
+    </div>
+
+    <div class="dashboard-container">
+        <!-- Sidebar -->
+        <aside class="sidebar">
+            <div class="logo">
+                <div class="logo-icon">
+                    <i class="fas fa-shield-halved"></i>
+                    <div class="logo-pulse"></div>
+                </div>
+                <span class="logo-text">CyberGuard</span>
+            </div>
+
+            <nav class="nav-menu">
+                <a href="index.html" class="nav-item">
+                    <div class="nav-icon"><i class="fas fa-th-large"></i></div>
+                    <span>Dashboard</span>
+                </a>
+                <a href="live-monitor.html" class="nav-item">
+                    <div class="nav-icon"><i class="fas fa-satellite-dish"></i></div>
+                    <span>Live Monitor</span>
+                    <div class="live-dot"></div>
+                </a>
+                <a href="static-analysis.html" class="nav-item">
+                    <div class="nav-icon"><i class="fas fa-file-import"></i></div>
+                    <span>Static Analysis</span>
+                </a>
+                <a href="ai-agents. html" class="nav-item">
+                    <div class="nav-icon"><i class="fas fa-robot"></i></div>
+                    <span>AI Agents</span>
+                    <span class="nav-badge">12</span>
+                </a>
+                <a href="threat-center.html" class="nav-item">
+                    <div class="nav-icon"><i class="fas fa-crosshairs"></i></div>
+                    <span>Threat Center</span>
+                </a>
+                <a href="analytics.html" class="nav-item">
+                    <div class="nav-icon"><i class="fas fa-chart-line"></i></div>
+                    <span>Analytics</span>
+                </a>
+                <a href="reports.html" class="nav-item">
+                    <div class="nav-icon"><i class="fas fa-file-alt"></i></div>
+                    <span>Reports</span>
+                </a>
+            </nav>
+
+            <div class="sidebar-footer">
+                <a href="settings.html" class="nav-item active">
+                    <div class="nav-icon"><i class="fas fa-cog"></i></div>
+                    <span>Settings</span>
+                    <div class="nav-indicator"></div>
+                </a>
+                <div class="system-status">
+                    <div class="status-indicator"></div>
+                    <span>System Online</span>
+                </div>
+            </div>
+        </aside>
+
+        <!-- Main Content -->
+        <main class="main-content">
+            <!-- Header -->
+            <header class="header">
+                <div class="header-left">
+                    <div class="breadcrumb">
+                        <span class="bc-item">Home</span>
+                        <i class="fas fa-chevron-right"></i>
+                        <span class="bc-item active">Settings</span>
+                    </div>
+                    <h1 class="page-title">
+                        <span class="title-icon"><i class="fas fa-cog"></i></span>
+                        System Settings
+                    </h1>
+                </div>
+                <div class="header-right">
+                    <button class="btn-save-all" id="btnSaveAll">
+                        <i class="fas fa-save"></i>
+                        Save All Changes
+                    </button>
+                    <div class="header-actions">
+                        <div class="user-profile">
+                            <div class="avatar">
+                                <img src="https://api.dicebear.com/7.x/avataaars/svg?seed=Tanush" alt="User">
+                                <div class="avatar-status"></div>
+                            </div>
+                            <div class="user-info">
+                                <span class="user-name">Tanush</span>
+                                <span class="user-role">Admin</span>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </header>
+
+            <!-- Settings Content -->
+            <div class="settings-content">
+                <!-- Settings Navigation -->
+                <div class="settings-nav">
+                    <button class="settings-nav-item active" data-section="general">
+                        <i class="fas fa-sliders-h"></i>
+                        <span>General</span>
+                    </button>
+                    <button class="settings-nav-item" data-section="security">
+                        <i class="fas fa-shield-alt"></i>
+                        <span>Security</span>
+                    </button>
+                    <button class="settings-nav-item" data-section="notifications">
+                        <i class="fas fa-bell"></i>
+                        <span>Notifications</span>
+                    </button>
+                    <button class="settings-nav-item" data-section="integrations">
+                        <i class="fas fa-plug"></i>
+                        <span>Integrations</span>
+                    </button>
+                    <button class="settings-nav-item" data-section="ai">
+                        <i class="fas fa-brain"></i>
+                        <span>AI Settings</span>
+                    </button>
+                    <button class="settings-nav-item" data-section="users">
+                        <i class="fas fa-users"></i>
+                        <span>Users & Teams</span>
+                    </button>
+                    <button class="settings-nav-item" data-section="backup">
+                        <i class="fas fa-database"></i>
+                        <span>Backup & Data</span>
+                    </button>
+                    <button class="settings-nav-item" data-section="about">
+                        <i class="fas fa-info-circle"></i>
+                        <span>About</span>
+                    </button>
+                </div>
+
+                <!-- Settings Panels -->
+                <div class="settings-panels">
+                    <!-- General Settings -->
+                    <div class="settings-panel active" id="panel-general">
+                        <div class="panel-header">
+                            <h2>General Settings</h2>
+                            <p>Configure basic system preferences</p>
+                        </div>
+
+                        <div class="settings-section">
+                            <h3><i class="fas fa-palette"></i> Appearance</h3>
+                            <div class="setting-item">
+                                <div class="setting-info">
+                                    <span class="setting-label">Theme</span>
+                                    <span class="setting-desc">Choose your preferred color theme</span>
+                                </div>
+                                <div class="theme-selector">
+                                    <button class="theme-btn active" data-theme="dark">
+                                        <i class="fas fa-moon"></i>
+                                        Dark
+                                    </button>
+                                    <button class="theme-btn" data-theme="light">
+                                        <i class="fas fa-sun"></i>
+                                        Light
+                                    </button>
+                                    <button class="theme-btn" data-theme="auto">
+                                        <i class="fas fa-adjust"></i>
+                                        Auto
+                                    </button>
+                                </div>
+                            </div>
+
+                            <div class="setting-item">
+                                <div class="setting-info">
+                                    <span class="setting-label">Accent Color</span>
+                                    <span class="setting-desc">Primary color for UI elements</span>
+                                </div>
+                                <div class="color-picker">
+                                    <button class="color-btn active" style="background: #6366f1;"></button>
+                                    <button class="color-btn" style="background: #8b5cf6;"></button>
+                                    <button class="color-btn" style="background: #ec4899;"></button>
+                                    <button class="color-btn" style="background: #14b8a6;"></button>
+                                    <button class="color-btn" style="background: #f59e0b;"></button>
+                                    <button class="color-btn" style="background: #ef4444;"></button>
+                                </div>
+                            </div>
+
+                            <div class="setting-item">
+                                <div class="setting-info">
+                                    <span class="setting-label">Sidebar Collapsed</span>
+                                    <span class="setting-desc">Minimize sidebar by default</span>
+                                </div>
+                                <div class="toggle-switch">
+                                    <input type="checkbox" id="sidebarCollapsed">
+                                    <label for="sidebarCollapsed"></label>
+                                </div>
+                            </div>
+
+                            <div class="setting-item">
+                                <div class="setting-info">
+                                    <span class="setting-label">Animations</span>
+                                    <span class="setting-desc">Enable UI animations and transitions</span>
+                                </div>
+                                <div class="toggle-switch">
+                                    <input type="checkbox" id="animations" checked>
+                                    <label for="animations"></label>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="settings-section">
+                            <h3><i class="fas fa-globe"></i> Localization</h3>
+                            <div class="setting-item">
+                                <div class="setting-info">
+                                    <span class="setting-label">Language</span>
+                                    <span class="setting-desc">Display language for the interface</span>
+                                </div>
+                                <select class="setting-select">
+                                    <option value="en">English (US)</option>
+                                    <option value="en-gb">English (UK)</option>
+                                    <option value="es">Español</option>
+                                    <option value="fr">Français</option>
+                                    <option value="de">Deutsch</option>
+                                    <option value="ja">日本語</option>
+                                </select>
+                            </div>
+
+                            <div class="setting-item">
+                                <div class="setting-info">
+                                    <span class="setting-label">Timezone</span>
+                                    <span class="setting-desc">Set your local timezone</span>
+                                </div>
+                                <select class="setting-select">
+                                    <option value="utc">UTC</option>
+                                    <option value="est" selected>Eastern Time (EST)</option>
+                                    <option value="pst">Pacific Time (PST)</option>
+                                    <option value="gmt">GMT</option>
+                                    <option value="ist">India Standard Time (IST)</option>
+                                </select>
+                            </div>
+
+                            <div class="setting-item">
+                                <div class="setting-info">
+                                    <span class="setting-label">Date Format</span>
+                                    <span class="setting-desc">How dates are displayed</span>
+                                </div>
+                                <select class="setting-select">
+                                    <option value="mdy">MM/DD/YYYY</option>
+                                    <option value="dmy">DD/MM/YYYY</option>
+                                    <option value="ymd">YYYY-MM-DD</option>
+                                </select>
+                            </div>
+                        </div>
+
+                        <div class="settings-section">
+                            <h3><i class="fas fa-tachometer-alt"></i> Dashboard</h3>
+                            <div class="setting-item">
+                                <div class="setting-info">
+                                    <span class="setting-label">Default Page</span>
+                                    <span class="setting-desc">Page shown after login</span>
+                                </div>
+                                <select class="setting-select">
+                                    <option value="dashboard" selected>Dashboard</option>
+                                    <option value="live-monitor">Live Monitor</option>
+                                    <option value="threat-center">Threat Center</option>
+                                    <option value="analytics">Analytics</option>
+                                </select>
+                            </div>
+
+                            <div class="setting-item">
+                                <div class="setting-info">
+                                    <span class="setting-label">Auto Refresh</span>
+                                    <span class="setting-desc">Automatically refresh data</span>
+                                </div>
+                                <div class="toggle-switch">
+                                    <input type="checkbox" id="autoRefresh" checked>
+                                    <label for="autoRefresh"></label>
+                                </div>
+                            </div>
+
+                            <div class="setting-item">
+                                <div class="setting-info">
+                                    <span class="setting-label">Refresh Interval</span>
+                                    <span class="setting-desc">How often to refresh data</span>
+                                </div>
+                                <select class="setting-select">
+                                    <option value="5">5 seconds</option>
+                                    <option value="10" selected>10 seconds</option>
+                                    <option value="30">30 seconds</option>
+                                    <option value="60">1 minute</option>
+                                </select>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Security Settings -->
+                    <div class="settings-panel" id="panel-security">
+                        <div class="panel-header">
+                            <h2>Security Settings</h2>
+                            <p>Configure security and authentication options</p>
+                        </div>
+
+                        <div class="settings-section">
+                            <h3><i class="fas fa-lock"></i> Authentication</h3>
+                            <div class="setting-item">
+                                <div class="setting-info">
+                                    <span class="setting-label">Two-Factor Authentication</span>
+                                    <span class="setting-desc">Add an extra layer of security</span>
+                                </div>
+                                <div class="toggle-switch">
+                                    <input type="checkbox" id="twoFactor" checked>
+                                    <label for="twoFactor"></label>
+                                </div>
+                            </div>
+
+                            <div class="setting-item">
+                                <div class="setting-info">
+                                    <span class="setting-label">Session Timeout</span>
+                                    <span class="setting-desc">Auto logout after inactivity</span>
+                                </div>
+                                <select class="setting-select">
+                                    <option value="15">15 minutes</option>
+                                    <option value="30" selected>30 minutes</option>
+                                    <option value="60">1 hour</option>
+                                    <option value="120">2 hours</option>
+                                    <option value="never">Never</option>
+                                </select>
+                            </div>
+
+                            <div class="setting-item">
+                                <div class="setting-info">
+                                    <span class="setting-label">Password Expiry</span>
+                                    <span class="setting-desc">Require password change periodically</span>
+                                </div>
+                                <select class="setting-select">
+                                    <option value="30">30 days</option>
+                                    <option value="60">60 days</option>
+                                    <option value="90" selected>90 days</option>
+                                    <option value="never">Never</option>
+                                </select>
+                            </div>
+                        </div>
+
+                        <div class="settings-section">
+                            <h3><i class="fas fa-key"></i> API Keys</h3>
+                            <div class="api-keys-list">
+                                <div class="api-key-item">
+                                    <div class="api-key-info">
+                                        <span class="api-key-name">Production API Key</span>
+                                        <span class="api-key-value">sk_live_••••••••••••4f2a</span>
+                                    </div>
+                                    <div class="api-key-actions">
+                                        <button class="api-key-btn" title="Copy">
+                                            <i class="fas fa-copy"></i>
+                                        </button>
+                                        <button class="api-key-btn" title="Regenerate">
+                                            <i class="fas fa-sync"></i>
+                                        </button>
+                                        <button class="api-key-btn danger" title="Delete">
+                                            <i class="fas fa-trash"></i>
+                                        </button>
+                                    </div>
+                                </div>
+                                <div class="api-key-item">
+                                    <div class="api-key-info">
+                                        <span class="api-key-name">Development API Key</span>
+                                        <span class="api-key-value">sk_test_••••••••••••8b3c</span>
+                                    </div>
+                                    <div class="api-key-actions">
+                                        <button class="api-key-btn" title="Copy">
+                                            <i class="fas fa-copy"></i>
+                                        </button>
+                                        <button class="api-key-btn" title="Regenerate">
+                                            <i class="fas fa-sync"></i>
+                                        </button>
+                                        <button class="api-key-btn danger" title="Delete">
+                                            <i class="fas fa-trash"></i>
+                                        </button>
+                                    </div>
+                                </div>
+                            </div>
+                            <button class="btn-add-key">
+                                <i class="fas fa-plus"></i> Generate New Key
+                            </button>
+                        </div>
+
+                        <div class="settings-section">
+                            <h3><i class="fas fa-shield-virus"></i> Threat Response</h3>
+                            <div class="setting-item">
+                                <div class="setting-info">
+                                    <span class="setting-label">Auto-Block Threats</span>
+                                    <span class="setting-desc">Automatically block detected threats</span>
+                                </div>
+                                <div class="toggle-switch">
+                                    <input type="checkbox" id="autoBlock" checked>
+                                    <label for="autoBlock"></label>
+                                </div>
+                            </div>
+
+                            <div class="setting-item">
+                                <div class="setting-info">
+                                    <span class="setting-label">Auto-Quarantine</span>
+                                    <span class="setting-desc">Isolate suspicious files automatically</span>
+                                </div>
+                                <div class="toggle-switch">
+                                    <input type="checkbox" id="autoQuarantine" checked>
+                                    <label for="autoQuarantine"></label>
+                                </div>
+                            </div>
+
+                            <div class="setting-item">
+                                <div class="setting-info">
+                                    <span class="setting-label">Threat Sensitivity</span>
+                                    <span class="setting-desc">Detection sensitivity level</span>
+                                </div>
+                                <div class="sensitivity-slider">
+                                    <input type="range" min="1" max="5" value="3" id="sensitivity">
+                                    <div class="slider-labels">
+                                        <span>Low</span>
+                                        <span>Medium</span>
+                                        <span>High</span>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Notifications Settings -->
+                    <div class="settings-panel" id="panel-notifications">
+                        <div class="panel-header">
+                            <h2>Notification Settings</h2>
+                            <p>Configure how you receive alerts and notifications</p>
+                        </div>
+
+                        <div class="settings-section">
+                            <h3><i class="fas fa-bell"></i> Alert Channels</h3>
+                            <div class="setting-item">
+                                <div class="setting-info">
+                                    <span class="setting-label">Email Notifications</span>
+                                    <span class="setting-desc">Receive alerts via email</span>
+                                </div>
+                                <div class="toggle-switch">
+                                    <input type="checkbox" id="emailNotif" checked>
+                                    <label for="emailNotif"></label>
+                                </div>
+                            </div>
+
+                            <div class="setting-item">
+                                <div class="setting-info">
+                                    <span class="setting-label">SMS Notifications</span>
+                                    <span class="setting-desc">Receive critical alerts via SMS</span>
+                                </div>
+                                <div class="toggle-switch">
+                                    <input type="checkbox" id="smsNotif">
+                                    <label for="smsNotif"></label>
+                                </div>
+                            </div>
+
+                            <div class="setting-item">
+                                <div class="setting-info">
+                                    <span class="setting-label">Browser Push</span>
+                                    <span class="setting-desc">Desktop push notifications</span>
+                                </div>
+                                <div class="toggle-switch">
+                                    <input type="checkbox" id="pushNotif" checked>
+                                    <label for="pushNotif"></label>
+                                </div>
+                            </div>
+
+                            <div class="setting-item">
+                                <div class="setting-info">
+                                    <span class="setting-label">Slack Integration</span>
+                                    <span class="setting-desc">Send alerts to Slack channel</span>
+                                </div>
+                                <div class="toggle-switch">
+                                    <input type="checkbox" id="slackNotif" checked>
+                                    <label for="slackNotif"></label>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="settings-section">
+                            <h3><i class="fas fa-filter"></i> Alert Types</h3>
+                            <div class="alert-types-grid">
+                                <div class="alert-type-card">
+                                    <div class="alert-type-header">
+                                        <span class="alert-dot critical"></span>
+                                        <span>Critical Alerts</span>
+                                    </div>
+                                    <div class="alert-type-options">
+                                        <label><input type="checkbox" checked> Email</label>
+                                        <label><input type="checkbox" checked> SMS</label>
+                                        <label><input type="checkbox" checked> Push</label>
+                                    </div>
+                                </div>
+                                <div class="alert-type-card">
+                                    <div class="alert-type-header">
+                                        <span class="alert-dot high"></span>
+                                        <span>High Priority</span>
+                                    </div>
+                                    <div class="alert-type-options">
+                                        <label><input type="checkbox" checked> Email</label>
+                                        <label><input type="checkbox"> SMS</label>
+                                        <label><input type="checkbox" checked> Push</label>
+                                    </div>
+                                </div>
+                                <div class="alert-type-card">
+                                    <div class="alert-type-header">
+                                        <span class="alert-dot medium"></span>
+                                        <span>Medium Priority</span>
+                                    </div>
+                                    <div class="alert-type-options">
+                                        <label><input type="checkbox" checked> Email</label>
+                                        <label><input type="checkbox"> SMS</label>
+                                        <label><input type="checkbox"> Push</label>
+                                    </div>
+                                </div>
+                                <div class="alert-type-card">
+                                    <div class="alert-type-header">
+                                        <span class="alert-dot low"></span>
+                                        <span>Low Priority</span>
+                                    </div>
+                                    <div class="alert-type-options">
+                                        <label><input type="checkbox"> Email</label>
+                                        <label><input type="checkbox"> SMS</label>
+                                        <label><input type="checkbox"> Push</label>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="settings-section">
+                            <h3><i class="fas fa-clock"></i> Quiet Hours</h3>
+                            <div class="setting-item">
+                                <div class="setting-info">
+                                    <span class="setting-label">Enable Quiet Hours</span>
+                                    <span class="setting-desc">Suppress non-critical notifications</span>
+                                </div>
+                                <div class="toggle-switch">
+                                    <input type="checkbox" id="quietHours">
+                                    <label for="quietHours"></label>
+                                </div>
+                            </div>
+                            <div class="time-range">
+                                <div class="time-input">
+                                    <label>From</label>
+                                    <input type="time" value="22:00">
+                                </div>
+                                <div class="time-input">
+                                    <label>To</label>
+                                    <input type="time" value="07:00">
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- AI Settings -->
+                    <div class="settings-panel" id="panel-ai">
+                        <div class="panel-header">
+                            <h2>AI Settings</h2>
+                            <p>Configure AI agents and machine learning models</p>
+                        </div>
+
+                        <div class="settings-section">
+                            <h3><i class="fas fa-robot"></i> AI Agents</h3>
+                            <div class="setting-item">
+                                <div class="setting-info">
+                                    <span class="setting-label">AI Auto-Response</span>
+                                    <span class="setting-desc">Allow AI to respond to threats automatically</span>
+                                </div>
+                                <div class="toggle-switch">
+                                    <input type="checkbox" id="aiAutoResponse" checked>
+                                    <label for="aiAutoResponse"></label>
+                                </div>
+                            </div>
+
+                            <div class="setting-item">
+                                <div class="setting-info">
+                                    <span class="setting-label">Learning Mode</span>
+                                    <span class="setting-desc">Allow AI to learn from new threats</span>
+                                </div>
+                                <div class="toggle-switch">
+                                    <input type="checkbox" id="learningMode" checked>
+                                    <label for="learningMode"></label>
+                                </div>
+                            </div>
+
+                            <div class="setting-item">
+                                <div class="setting-info">
+                                    <span class="setting-label">Confidence Threshold</span>
+                                    <span class="setting-desc">Minimum confidence for auto-actions</span>
+                                </div>
+                                <div class="threshold-slider">
+                                    <input type="range" min="50" max="99" value="85" id="confidenceThreshold">
+                                    <span class="threshold-value">85%</span>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="settings-section">
+                            <h3><i class="fas fa-brain"></i> Model Configuration</h3>
+                            <div class="model-cards">
+                                <div class="model-card">
+                                    <div class="model-header">
+                                        <div class="model-icon">
+                                            <i class="fas fa-shield-virus"></i>
+                                        </div>
+                                        <div class="model-info">
+                                            <span class="model-name">Malware Detection</span>
+                                            <span class="model-version">v3.2.1</span>
+                                        </div>
+                                        <span class="model-status active">Active</span>
+                                    </div>
+                                    <div class="model-stats">
+                                        <div class="model-stat">
+                                            <span class="stat-label">Accuracy</span>
+                                            <span class="stat-value">98. 7%</span>
+                                        </div>
+                                        <div class="model-stat">
+                                            <span class="stat-label">Last Updated</span>
+                                            <span class="stat-value">2 days ago</span>
+                                        </div>
+                                    </div>
+                                    <button class="btn-update-model">
+                                        <i class="fas fa-sync"></i> Check for Updates
+                                    </button>
+                                </div>
+
+                                <div class="model-card">
+                                    <div class="model-header">
+                                        <div class="model-icon">
+                                            <i class="fas fa-network-wired"></i>
+                                        </div>
+                                        <div class="model-info">
+                                            <span class="model-name">Network Anomaly</span>
+                                            <span class="model-version">v2.8.4</span>
+                                        </div>
+                                        <span class="model-status active">Active</span>
+                                    </div>
+                                    <div class="model-stats">
+                                        <div class="model-stat">
+                                            <span class="stat-label">Accuracy</span>
+                                            <span class="stat-value">96.2%</span>
+                                        </div>
+                                        <div class="model-stat">
+                                            <span class="stat-label">Last Updated</span>
+                                            <span class="stat-value">5 days ago</span>
+                                        </div>
+                                    </div>
+                                    <button class="btn-update-model">
+                                        <i class="fas fa-sync"></i> Check for Updates
+                                    </button>
+                                </div>
+
+                                <div class="model-card">
+                                    <div class="model-header">
+                                        <div class="model-icon">
+                                            <i class="fas fa-user-secret"></i>
+                                        </div>
+                                        <div class="model-info">
+                                            <span class="model-name">Behavior Analysis</span>
+                                            <span class="model-version">v1.5.0</span>
+                                        </div>
+                                        <span class="model-status training">Training</span>
+                                    </div>
+                                    <div class="model-stats">
+                                        <div class="model-stat">
+                                            <span class="stat-label">Accuracy</span>
+                                            <span class="stat-value">94.1%</span>
+                                        </div>
+                                        <div class="model-stat">
+                                            <span class="stat-label">Progress</span>
+                                            <span class="stat-value">72%</span>
+                                        </div>
+                                    </div>
+                                    <div class="training-progress">
+                                        <div class="training-bar">
+                                            <div class="training-fill" style="width: 72%"></div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Integrations Settings -->
+                    <div class="settings-panel" id="panel-integrations">
+                        <div class="panel-header">
+                            <h2>Integrations</h2>
+                            <p>Connect with third-party services and tools</p>
+                        </div>
+
+                        <div class="integrations-grid">
+                            <div class="integration-card connected">
+                                <div class="integration-icon slack">
+                                    <i class="fab fa-slack"></i>
+                                </div>
+                                <div class="integration-info">
+                                    <span class="integration-name">Slack</span>
+                                    <span class="integration-status">Connected</span>
+                                </div>
+                                <button class="integration-btn disconnect">Disconnect</button>
+                            </div>
+
+                            <div class="integration-card connected">
+                                <div class="integration-icon jira">
+                                    <i class="fab fa-jira"></i>
+                                </div>
+                                <div class="integration-info">
+                                    <span class="integration-name">Jira</span>
+                                    <span class="integration-status">Connected</span>
+                                </div>
+                                <button class="integration-btn disconnect">Disconnect</button>
+                            </div>
+
+                            <div class="integration-card">
+                                <div class="integration-icon teams">
+                                    <i class="fab fa-microsoft"></i>
+                                </div>
+                                <div class="integration-info">
+                                    <span class="integration-name">Microsoft Teams</span>
+                                    <span class="integration-status">Not Connected</span>
+                                </div>
+                                <button class="integration-btn connect">Connect</button>
+                            </div>
+
+                            <div class="integration-card">
+                                <div class="integration-icon pagerduty">
+                                    <i class="fas fa-pager"></i>
+                                </div>
+                                <div class="integration-info">
+                                    <span class="integration-name">PagerDuty</span>
+                                    <span class="integration-status">Not Connected</span>
+                                </div>
+                                <button class="integration-btn connect">Connect</button>
+                            </div>
+
+                            <div class="integration-card connected">
+                                <div class="integration-icon splunk">
+                                    <i class="fas fa-chart-bar"></i>
+                                </div>
+                                <div class="integration-info">
+                                    <span class="integration-name">Splunk</span>
+                                    <span class="integration-status">Connected</span>
+                                </div>
+                                <button class="integration-btn disconnect">Disconnect</button>
+                            </div>
+
+                            <div class="integration-card">
+                                <div class="integration-icon aws">
+                                    <i class="fab fa-aws"></i>
+                                </div>
+                                <div class="integration-info">
+                                    <span class="integration-name">AWS Security Hub</span>
+                                    <span class="integration-status">Not Connected</span>
+                                </div>
+                                <button class="integration-btn connect">Connect</button>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Users & Teams Settings -->
+                    <div class="settings-panel" id="panel-users">
+                        <div class="panel-header">
+                            <h2>Users & Teams</h2>
+                            <p>Manage user accounts and team permissions</p>
+                        </div>
+
+                        <div class="settings-section">
+                            <div class="users-header">
+                                <h3><i class="fas fa-users"></i> Team Members</h3>
+                                <button class="btn-invite">
+                                    <i class="fas fa-user-plus"></i> Invite User
+                                </button>
+                            </div>
+                            <div class="users-list">
+                                <div class="user-item">
+                                    <div class="user-avatar">
+                                        <img src="https://api.dicebear.com/7.x/avataaars/svg? seed=Tanush" alt="User">
+                                    </div>
+                                    <div class="user-details">
+                                        <span class="user-name">Tanush</span>
+                                        <span class="user-email">tanush@cyberguard.com</span>
+                                    </div>
+                                    <span class="user-role-badge admin">Admin</span>
+                                    <span class="user-status-badge online">Online</span>
+                                    <button class="user-action-btn"><i class="fas fa-ellipsis-v"></i></button>
+                                </div>
+
+                                <div class="user-item">
+                                    <div class="user-avatar">
+                                        <img src="https://api.dicebear.com/7.x/avataaars/svg?seed=Alex" alt="User">
+                                    </div>
+                                    <div class="user-details">
+                                        <span class="user-name">Alex Johnson</span>
+                                        <span class="user-email">alex@cyberguard.com</span>
+                                    </div>
+                                    <span class="user-role-badge analyst">Analyst</span>
+                                    <span class="user-status-badge online">Online</span>
+                                    <button class="user-action-btn"><i class="fas fa-ellipsis-v"></i></button>
+                                </div>
+
+                                <div class="user-item">
+                                    <div class="user-avatar">
+                                        <img src="https://api.dicebear. com/7.x/avataaars/svg?seed=Sarah" alt="User">
+                                    </div>
+                                    <div class="user-details">
+                                        <span class="user-name">Sarah Williams</span>
+                                        <span class="user-email">sarah@cyberguard.com</span>
+                                    </div>
+                                    <span class="user-role-badge analyst">Analyst</span>
+                                    <span class="user-status-badge offline">Offline</span>
+                                    <button class="user-action-btn"><i class="fas fa-ellipsis-v"></i></button>
+                                </div>
+
+                                <div class="user-item">
+                                    <div class="user-avatar">
+                                        <img src="https://api.dicebear.com/7.x/avataaars/svg?seed=Mike" alt="User">
+                                    </div>
+                                    <div class="user-details">
+                                        <span class="user-name">Mike Chen</span>
+                                        <span class="user-email">mike@cyberguard. com</span>
+                                    </div>
+                                    <span class="user-role-badge viewer">Viewer</span>
+                                    <span class="user-status-badge offline">Offline</span>
+                                    <button class="user-action-btn"><i class="fas fa-ellipsis-v"></i></button>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Backup & Data Settings -->
+                    <div class="settings-panel" id="panel-backup">
+                        <div class="panel-header">
+                            <h2>Backup & Data</h2>
+                            <p>Manage data backups and storage settings</p>
+                        </div>
+
+                        <div class="settings-section">
+                            <h3><i class="fas fa-hdd"></i> Storage Overview</h3>
+                            <div class="storage-overview">
+                                <div class="storage-chart">
+                                    <svg viewBox="0 0 36 36" class="storage-ring">
+                                        <path class="ring-bg" d="M18 2. 0845 a 15.9155 15.9155 0 0 1 0 31.831 a 15.9155 15.9155 0 0 1 0 -31.831"/>
+                                        <path class="ring-fill" stroke-dasharray="65, 100" d="M18 2.0845 a 15.9155 15.9155 0 0 1 0 31.831 a 15.9155 15.9155 0 0 1 0 -31.831"/>
+                                    </svg>
+                                    <div class="storage-center">
+                                        <span class="storage-percent">65%</span>
+                                        <span class="storage-label">Used</span>
+                                    </div>
+                                </div>
+                                <div class="storage-details">
+                                    <div class="storage-item">
+                                        <span class="storage-color logs"></span>
+                                        <span class="storage-name">Security Logs</span>
+                                        <span class="storage-size">45.2 GB</span>
+                                    </div>
+                                    <div class="storage-item">
+                                        <span class="storage-color reports"></span>
+                                        <span class="storage-name">Reports</span>
+                                        <span class="storage-size">12.8 GB</span>
+                                    </div>
+                                    <div class="storage-item">
+                                        <span class="storage-color backups"></span>
+                                        <span class="storage-name">Backups</span>
+                                        <span class="storage-size">8.5 GB</span>
+                                    </div>
+                                    <div class="storage-item">
+                                        <span class="storage-color other"></span>
+                                        <span class="storage-name">Other</span>
+                                        <span class="storage-size">3.5 GB</span>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="settings-section">
+                            <h3><i class="fas fa-cloud-upload-alt"></i> Backup Settings</h3>
+                            <div class="setting-item">
+                                <div class="setting-info">
+                                    <span class="setting-label">Automatic Backups</span>
+                                    <span class="setting-desc">Schedule regular data backups</span>
+                                </div>
+                                <div class="toggle-switch">
+                                    <input type="checkbox" id="autoBackup" checked>
+                                    <label for="autoBackup"></label>
+                                </div>
+                            </div>
+
+                            <div class="setting-item">
+                                <div class="setting-info">
+                                    <span class="setting-label">Backup Frequency</span>
+                                    <span class="setting-desc">How often to create backups</span>
+                                </div>
+                                <select class="setting-select">
+                                    <option value="daily" selected>Daily</option>
+                                    <option value="weekly">Weekly</option>
+                                    <option value="monthly">Monthly</option>
+                                </select>
+                            </div>
+
+                            <div class="setting-item">
+                                <div class="setting-info">
+                                    <span class="setting-label">Retention Period</span>
+                                    <span class="setting-desc">How long to keep backups</span>
+                                </div>
+                                <select class="setting-select">
+                                    <option value="30">30 days</option>
+                                    <option value="90" selected>90 days</option>
+                                    <option value="180">180 days</option>
+                                    <option value="365">1 year</option>
+                                </select>
+                            </div>
+
+                            <div class="backup-actions">
+                                <button class="btn-backup">
+                                    <i class="fas fa-cloud-upload-alt"></i> Backup Now
+                                </button>
+                                <button class="btn-restore">
+                                    <i class="fas fa-cloud-download-alt"></i> Restore Backup
+                                </button>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- About Settings -->
+                    <div class="settings-panel" id="panel-about">
+                        <div class="panel-header">
+                            <h2>About CyberGuard</h2>
+                            <p>System information and version details</p>
+                        </div>
+
+                        <div class="about-content">
+                            <div class="about-logo">
+                                <div class="logo-icon large">
+                                    <i class="fas fa-shield-halved"></i>
+                                </div>
+                                <h2>AI CyberGuard</h2>
+                                <span class="version">Version 2.5.0</span>
+                            </div>
+
+                            <div class="about-info">
+                                <div class="info-row">
+                                    <span class="info-label">Build</span>
+                                    <span class="info-value">2024. 12.11. 001</span>
+                                </div>
+                                <div class="info-row">
+                                    <span class="info-label">License</span>
+                                    <span class="info-value">Enterprise</span>
+                                </div>
+                                <div class="info-row">
+                                    <span class="info-label">License Valid Until</span>
+                                    <span class="info-value">Dec 31, 2025</span>
+                                </div>
+                                <div class="info-row">
+                                    <span class="info-label">Last Update</span>
+                                    <span class="info-value">Dec 10, 2024</span>
+                                </div>
+                            </div>
+
+                            <div class="about-actions">
+                                <button class="about-btn">
+                                    <i class="fas fa-sync"></i> Check for Updates
+                                </button>
+                                <button class="about-btn">
+                                    <i class="fas fa-file-alt"></i> View License
+                                </button>
+                                <button class="about-btn">
+                                    <i class="fas fa-question-circle"></i> Documentation
+                                </button>
+                                <button class="about-btn">
+                                    <i class="fas fa-headset"></i> Contact Support
+                                </button>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </main>
+    </div>
+
+    <!-- JavaScript -->
+    <script src="settings.js"></script>
+</body>
+</html>

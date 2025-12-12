@@ -1,0 +1,833 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>AI Agents - CyberGuard</title>
+    
+    <!-- Google Fonts -->
+    <link href="https://fonts.googleapis.com/css2? family=Outfit:wght@300;400;500;600;700&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
+    
+    <!-- Font Awesome Icons -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    
+    <!-- CSS Files -->
+    <link rel="stylesheet" href="styles.css">
+    <link rel="stylesheet" href="ai-agents.css">
+</head>
+<body>
+    <!-- Background Animation -->
+    <div class="bg-animation">
+        <div class="cyber-grid"></div>
+        <div class="floating-particles" id="particles"></div>
+    </div>
+
+    <div class="dashboard-container">
+        <!-- Sidebar -->
+        <aside class="sidebar">
+            <div class="logo">
+                <div class="logo-icon">
+                    <i class="fas fa-shield-halved"></i>
+                    <div class="logo-pulse"></div>
+                </div>
+                <span class="logo-text">CyberGuard</span>
+            </div>
+
+            <nav class="nav-menu">
+                <a href="index.html" class="nav-item">
+                    <div class="nav-icon"><i class="fas fa-th-large"></i></div>
+                    <span>Dashboard</span>
+                </a>
+                <a href="live-monitor.html" class="nav-item">
+                    <div class="nav-icon"><i class="fas fa-satellite-dish"></i></div>
+                    <span>Live Monitor</span>
+                    <div class="live-dot"></div>
+                </a>
+                <a href="static-analysis.html" class="nav-item">
+                    <div class="nav-icon"><i class="fas fa-file-import"></i></div>
+                    <span>Static Analysis</span>
+                </a>
+                <a href="ai-agents.html" class="nav-item active">
+                    <div class="nav-icon"><i class="fas fa-robot"></i></div>
+                    <span>AI Agents</span>
+                    <span class="nav-badge">12</span>
+                    <div class="nav-indicator"></div>
+                </a>
+                <a href="#" class="nav-item">
+                    <div class="nav-icon"><i class="fas fa-crosshairs"></i></div>
+                    <span>Threat Center</span>
+                </a>
+                <a href="#" class="nav-item">
+                    <div class="nav-icon"><i class="fas fa-chart-line"></i></div>
+                    <span>Analytics</span>
+                </a>
+                <a href="#" class="nav-item">
+                    <div class="nav-icon"><i class="fas fa-file-alt"></i></div>
+                    <span>Reports</span>
+                </a>
+            </nav>
+
+            <div class="sidebar-footer">
+                <a href="#" class="nav-item">
+                    <div class="nav-icon"><i class="fas fa-cog"></i></div>
+                    <span>Settings</span>
+                </a>
+                <div class="system-status">
+                    <div class="status-indicator"></div>
+                    <span>System Online</span>
+                </div>
+            </div>
+        </aside>
+
+        <!-- Main Content -->
+        <main class="main-content">
+            <!-- Header -->
+            <header class="header">
+                <div class="header-left">
+                    <div class="breadcrumb">
+                        <span class="bc-item">Home</span>
+                        <i class="fas fa-chevron-right"></i>
+                        <span class="bc-item active">AI Agents</span>
+                    </div>
+                    <h1 class="page-title">
+                        <span class="title-icon"><i class="fas fa-robot"></i></span>
+                        AI Security Agents
+                    </h1>
+                </div>
+                <div class="header-right">
+                    <button class="btn-create-agent" id="btnCreateAgent">
+                        <i class="fas fa-plus"></i>
+                        Deploy New Agent
+                    </button>
+                    <div class="header-actions">
+                        <button class="action-btn">
+                            <i class="fas fa-bell"></i>
+                            <span class="notif-badge">5</span>
+                        </button>
+                        <div class="user-profile">
+                            <div class="avatar">
+                                <img src="https://api.dicebear.com/7.x/avataaars/svg? seed=Tanush" alt="User">
+                                <div class="avatar-status"></div>
+                            </div>
+                            <div class="user-info">
+                                <span class="user-name">Tanush</span>
+                                <span class="user-role">Admin</span>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </header>
+
+            <!-- Agents Content -->
+            <div class="agents-content">
+                <!-- Agent Stats Overview -->
+                <div class="agent-stats-row">
+                    <div class="agent-stat-card">
+                        <div class="stat-icon-wrapper green">
+                            <i class="fas fa-robot"></i>
+                        </div>
+                        <div class="stat-info">
+                            <span class="stat-value" id="totalAgents">12</span>
+                            <span class="stat-label">Total Agents</span>
+                        </div>
+                        <div class="stat-chart mini-chart">
+                            <svg viewBox="0 0 60 30">
+                                <path d="M0,25 L10,20 L20,22 L30,15 L40,18 L50,10 L60,12" fill="none" stroke="var(--success)" stroke-width="2"/>
+                            </svg>
+                        </div>
+                    </div>
+
+                    <div class="agent-stat-card">
+                        <div class="stat-icon-wrapper blue">
+                            <i class="fas fa-play-circle"></i>
+                        </div>
+                        <div class="stat-info">
+                            <span class="stat-value" id="activeAgents">8</span>
+                            <span class="stat-label">Active</span>
+                        </div>
+                        <div class="stat-ring">
+                            <svg viewBox="0 0 36 36">
+                                <path class="ring-bg" d="M18 2. 0845 a 15.9155 15.9155 0 0 1 0 31.831 a 15.9155 15.9155 0 0 1 0 -31.831"/>
+                                <path class="ring-fill" stroke="var(--accent-primary)" d="M18 2.0845 a 15.9155 15.9155 0 0 1 0 31.831 a 15.9155 15.9155 0 0 1 0 -31.831" stroke-dasharray="67, 100"/>
+                            </svg>
+                            <span class="ring-text">67%</span>
+                        </div>
+                    </div>
+
+                    <div class="agent-stat-card">
+                        <div class="stat-icon-wrapper orange">
+                            <i class="fas fa-brain"></i>
+                        </div>
+                        <div class="stat-info">
+                            <span class="stat-value" id="learningAgents">2</span>
+                            <span class="stat-label">Learning</span>
+                        </div>
+                        <div class="learning-indicator">
+                            <div class="learning-dots">
+                                <span></span>
+                                <span></span>
+                                <span></span>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="agent-stat-card">
+                        <div class="stat-icon-wrapper red">
+                            <i class="fas fa-shield-alt"></i>
+                        </div>
+                        <div class="stat-info">
+                            <span class="stat-value" id="threatsBlocked">2,847</span>
+                            <span class="stat-label">Threats Blocked</span>
+                        </div>
+                        <div class="stat-trend up">
+                            <i class="fas fa-arrow-up"></i>
+                            <span>+12.5%</span>
+                        </div>
+                    </div>
+
+                    <div class="agent-stat-card">
+                        <div class="stat-icon-wrapper purple">
+                            <i class="fas fa-tachometer-alt"></i>
+                        </div>
+                        <div class="stat-info">
+                            <span class="stat-value">98. 7%</span>
+                            <span class="stat-label">Accuracy</span>
+                        </div>
+                        <div class="accuracy-bar">
+                            <div class="accuracy-fill" style="width: 98.7%"></div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Main Grid -->
+                <div class="agents-grid">
+                    <!-- Agent Cards -->
+                    <div class="agents-list-section">
+                        <div class="section-header">
+                            <h3><i class="fas fa-th-large"></i> Agent Fleet</h3>
+                            <div class="view-toggle">
+                                <button class="toggle-btn active" data-view="grid">
+                                    <i class="fas fa-th-large"></i>
+                                </button>
+                                <button class="toggle-btn" data-view="list">
+                                    <i class="fas fa-list"></i>
+                                </button>
+                            </div>
+                        </div>
+
+                        <div class="agents-cards" id="agentsContainer">
+                            <!-- Agent 1: Sentinel -->
+                            <div class="agent-card" data-status="active">
+                                <div class="agent-card-header">
+                                    <div class="agent-avatar sentinel">
+                                        <i class="fas fa-eye"></i>
+                                        <div class="avatar-pulse"></div>
+                                    </div>
+                                    <div class="agent-title">
+                                        <h4>Sentinel-01</h4>
+                                        <span class="agent-type">Network Monitor</span>
+                                    </div>
+                                    <div class="agent-status-badge online">
+                                        <span class="status-dot"></span>
+                                        Active
+                                    </div>
+                                </div>
+                                
+                                <div class="agent-card-body">
+                                    <p class="agent-description">Real-time network traffic analysis and intrusion detection. </p>
+                                    
+                                    <div class="agent-metrics">
+                                        <div class="metric">
+                                            <div class="metric-header">
+                                                <span class="metric-label">CPU</span>
+                                                <span class="metric-value">67%</span>
+                                            </div>
+                                            <div class="metric-bar">
+                                                <div class="metric-fill cpu" style="width: 67%"></div>
+                                            </div>
+                                        </div>
+                                        <div class="metric">
+                                            <div class="metric-header">
+                                                <span class="metric-label">Memory</span>
+                                                <span class="metric-value">45%</span>
+                                            </div>
+                                            <div class="metric-bar">
+                                                <div class="metric-fill memory" style="width:  45%"></div>
+                                            </div>
+                                        </div>
+                                    </div>
+
+                                    <div class="agent-stats">
+                                        <div class="agent-stat-item">
+                                            <i class="fas fa-shield-alt"></i>
+                                            <span>1,247 blocked</span>
+                                        </div>
+                                        <div class="agent-stat-item">
+                                            <i class="fas fa-clock"></i>
+                                            <span>24h uptime</span>
+                                        </div>
+                                    </div>
+                                </div>
+
+                                <div class="agent-card-footer">
+                                    <button class="agent-btn" title="View Details">
+                                        <i class="fas fa-eye"></i>
+                                    </button>
+                                    <button class="agent-btn" title="Configure">
+                                        <i class="fas fa-cog"></i>
+                                    </button>
+                                    <button class="agent-btn" title="Logs">
+                                        <i class="fas fa-file-alt"></i>
+                                    </button>
+                                    <button class="agent-btn pause" title="Pause">
+                                        <i class="fas fa-pause"></i>
+                                    </button>
+                                </div>
+                            </div>
+
+                            <!-- Agent 2: Hunter -->
+                            <div class="agent-card" data-status="hunting">
+                                <div class="agent-card-header">
+                                    <div class="agent-avatar hunter">
+                                        <i class="fas fa-crosshairs"></i>
+                                        <div class="avatar-pulse"></div>
+                                    </div>
+                                    <div class="agent-title">
+                                        <h4>Hunter-02</h4>
+                                        <span class="agent-type">Threat Hunter</span>
+                                    </div>
+                                    <div class="agent-status-badge hunting">
+                                        <span class="status-dot"></span>
+                                        Hunting
+                                    </div>
+                                </div>
+                                
+                                <div class="agent-card-body">
+                                    <p class="agent-description">Proactively searches for hidden threats and APTs.</p>
+                                    
+                                    <div class="agent-metrics">
+                                        <div class="metric">
+                                            <div class="metric-header">
+                                                <span class="metric-label">CPU</span>
+                                                <span class="metric-value">82%</span>
+                                            </div>
+                                            <div class="metric-bar">
+                                                <div class="metric-fill cpu high" style="width:  82%"></div>
+                                            </div>
+                                        </div>
+                                        <div class="metric">
+                                            <div class="metric-header">
+                                                <span class="metric-label">Memory</span>
+                                                <span class="metric-value">71%</span>
+                                            </div>
+                                            <div class="metric-bar">
+                                                <div class="metric-fill memory" style="width: 71%"></div>
+                                            </div>
+                                        </div>
+                                    </div>
+
+                                    <div class="hunt-progress">
+                                        <div class="hunt-info">
+                                            <span>Scanning:  /var/log/</span>
+                                            <span class="hunt-percent">34%</span>
+                                        </div>
+                                        <div class="hunt-bar">
+                                            <div class="hunt-fill" style="width: 34%"></div>
+                                        </div>
+                                    </div>
+
+                                    <div class="agent-stats">
+                                        <div class="agent-stat-item">
+                                            <i class="fas fa-bug"></i>
+                                            <span>5 threats found</span>
+                                        </div>
+                                        <div class="agent-stat-item">
+                                            <i class="fas fa-search"></i>
+                                            <span>12.4K files</span>
+                                        </div>
+                                    </div>
+                                </div>
+
+                                <div class="agent-card-footer">
+                                    <button class="agent-btn" title="View Details">
+                                        <i class="fas fa-eye"></i>
+                                    </button>
+                                    <button class="agent-btn" title="Configure">
+                                        <i class="fas fa-cog"></i>
+                                    </button>
+                                    <button class="agent-btn" title="Logs">
+                                        <i class="fas fa-file-alt"></i>
+                                    </button>
+                                    <button class="agent-btn stop" title="Stop Hunt">
+                                        <i class="fas fa-stop"></i>
+                                    </button>
+                                </div>
+                            </div>
+
+                            <!-- Agent 3: Neural -->
+                            <div class="agent-card" data-status="learning">
+                                <div class="agent-card-header">
+                                    <div class="agent-avatar neural">
+                                        <i class="fas fa-brain"></i>
+                                        <div class="avatar-pulse learning"></div>
+                                    </div>
+                                    <div class="agent-title">
+                                        <h4>Neural-03</h4>
+                                        <span class="agent-type">Anomaly Detector</span>
+                                    </div>
+                                    <div class="agent-status-badge learning">
+                                        <span class="status-dot"></span>
+                                        Learning
+                                    </div>
+                                </div>
+                                
+                                <div class="agent-card-body">
+                                    <p class="agent-description">Deep learning model for behavioral anomaly detection.</p>
+                                    
+                                    <div class="learning-progress">
+                                        <div class="learning-header">
+                                            <span>Training Progress</span>
+                                            <span class="learning-epoch">Epoch 145/200</span>
+                                        </div>
+                                        <div class="learning-bar">
+                                            <div class="learning-fill" style="width: 72%"></div>
+                                        </div>
+                                        <div class="learning-stats">
+                                            <div class="learning-stat">
+                                                <span class="label">Accuracy</span>
+                                                <span class="value">94. 2%</span>
+                                            </div>
+                                            <div class="learning-stat">
+                                                <span class="label">Loss</span>
+                                                <span class="value">0.0234</span>
+                                            </div>
+                                            <div class="learning-stat">
+                                                <span class="label">ETA</span>
+                                                <span class="value">2h 15m</span>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+
+                                <div class="agent-card-footer">
+                                    <button class="agent-btn" title="View Details">
+                                        <i class="fas fa-eye"></i>
+                                    </button>
+                                    <button class="agent-btn" title="Configure">
+                                        <i class="fas fa-cog"></i>
+                                    </button>
+                                    <button class="agent-btn" title="Training Logs">
+                                        <i class="fas fa-chart-line"></i>
+                                    </button>
+                                    <button class="agent-btn pause" title="Pause Training">
+                                        <i class="fas fa-pause"></i>
+                                    </button>
+                                </div>
+                            </div>
+
+                            <!-- Agent 4: Guardian -->
+                            <div class="agent-card" data-status="active">
+                                <div class="agent-card-header">
+                                    <div class="agent-avatar guardian">
+                                        <i class="fas fa-shield-alt"></i>
+                                        <div class="avatar-pulse"></div>
+                                    </div>
+                                    <div class="agent-title">
+                                        <h4>Guardian-04</h4>
+                                        <span class="agent-type">Active Defense</span>
+                                    </div>
+                                    <div class="agent-status-badge online">
+                                        <span class="status-dot"></span>
+                                        Active
+                                    </div>
+                                </div>
+                                
+                                <div class="agent-card-body">
+                                    <p class="agent-description">Automated threat response and quarantine system.</p>
+                                    
+                                    <div class="agent-metrics">
+                                        <div class="metric">
+                                            <div class="metric-header">
+                                                <span class="metric-label">CPU</span>
+                                                <span class="metric-value">34%</span>
+                                            </div>
+                                            <div class="metric-bar">
+                                                <div class="metric-fill cpu" style="width:  34%"></div>
+                                            </div>
+                                        </div>
+                                        <div class="metric">
+                                            <div class="metric-header">
+                                                <span class="metric-label">Memory</span>
+                                                <span class="metric-value">28%</span>
+                                            </div>
+                                            <div class="metric-bar">
+                                                <div class="metric-fill memory" style="width:  28%"></div>
+                                            </div>
+                                        </div>
+                                    </div>
+
+                                    <div class="defense-stats">
+                                        <div class="defense-stat">
+                                            <span class="defense-value">234</span>
+                                            <span class="defense-label">Quarantined</span>
+                                        </div>
+                                        <div class="defense-stat">
+                                            <span class="defense-value">12</span>
+                                            <span class="defense-label">Blocked IPs</span>
+                                        </div>
+                                        <div class="defense-stat">
+                                            <span class="defense-value">3</span>
+                                            <span class="defense-label">Auto-Patched</span>
+                                        </div>
+                                    </div>
+                                </div>
+
+                                <div class="agent-card-footer">
+                                    <button class="agent-btn" title="View Details">
+                                        <i class="fas fa-eye"></i>
+                                    </button>
+                                    <button class="agent-btn" title="Configure">
+                                        <i class="fas fa-cog"></i>
+                                    </button>
+                                    <button class="agent-btn" title="Quarantine List">
+                                        <i class="fas fa-box"></i>
+                                    </button>
+                                    <button class="agent-btn pause" title="Pause">
+                                        <i class="fas fa-pause"></i>
+                                    </button>
+                                </div>
+                            </div>
+
+                            <!-- Agent 5: Watcher -->
+                            <div class="agent-card" data-status="active">
+                                <div class="agent-card-header">
+                                    <div class="agent-avatar watcher">
+                                        <i class="fas fa-user-secret"></i>
+                                        <div class="avatar-pulse"></div>
+                                    </div>
+                                    <div class="agent-title">
+                                        <h4>Watcher-05</h4>
+                                        <span class="agent-type">User Behavior</span>
+                                    </div>
+                                    <div class="agent-status-badge online">
+                                        <span class="status-dot"></span>
+                                        Active
+                                    </div>
+                                </div>
+                                
+                                <div class="agent-card-body">
+                                    <p class="agent-description">Monitors user activity for insider threat detection.</p>
+                                    
+                                    <div class="agent-metrics">
+                                        <div class="metric">
+                                            <div class="metric-header">
+                                                <span class="metric-label">CPU</span>
+                                                <span class="metric-value">45%</span>
+                                            </div>
+                                            <div class="metric-bar">
+                                                <div class="metric-fill cpu" style="width:  45%"></div>
+                                            </div>
+                                        </div>
+                                        <div class="metric">
+                                            <div class="metric-header">
+                                                <span class="metric-label">Memory</span>
+                                                <span class="metric-value">52%</span>
+                                            </div>
+                                            <div class="metric-bar">
+                                                <div class="metric-fill memory" style="width:  52%"></div>
+                                            </div>
+                                        </div>
+                                    </div>
+
+                                    <div class="agent-stats">
+                                        <div class="agent-stat-item">
+                                            <i class="fas fa-users"></i>
+                                            <span>847 users</span>
+                                        </div>
+                                        <div class="agent-stat-item">
+                                            <i class="fas fa-exclamation-triangle"></i>
+                                            <span>3 anomalies</span>
+                                        </div>
+                                    </div>
+                                </div>
+
+                                <div class="agent-card-footer">
+                                    <button class="agent-btn" title="View Details">
+                                        <i class="fas fa-eye"></i>
+                                    </button>
+                                    <button class="agent-btn" title="Configure">
+                                        <i class="fas fa-cog"></i>
+                                    </button>
+                                    <button class="agent-btn" title="Logs">
+                                        <i class="fas fa-file-alt"></i>
+                                    </button>
+                                    <button class="agent-btn pause" title="Pause">
+                                        <i class="fas fa-pause"></i>
+                                    </button>
+                                </div>
+                            </div>
+
+                            <!-- Agent 6: Decoder (Idle) -->
+                            <div class="agent-card" data-status="idle">
+                                <div class="agent-card-header">
+                                    <div class="agent-avatar decoder">
+                                        <i class="fas fa-code"></i>
+                                    </div>
+                                    <div class="agent-title">
+                                        <h4>Decoder-06</h4>
+                                        <span class="agent-type">Malware Analyzer</span>
+                                    </div>
+                                    <div class="agent-status-badge idle">
+                                        <span class="status-dot"></span>
+                                        Idle
+                                    </div>
+                                </div>
+                                
+                                <div class="agent-card-body">
+                                    <p class="agent-description">Automated malware reverse engineering and analysis.</p>
+                                    
+                                    <div class="agent-metrics">
+                                        <div class="metric">
+                                            <div class="metric-header">
+                                                <span class="metric-label">CPU</span>
+                                                <span class="metric-value">2%</span>
+                                            </div>
+                                            <div class="metric-bar">
+                                                <div class="metric-fill cpu" style="width:  2%"></div>
+                                            </div>
+                                        </div>
+                                        <div class="metric">
+                                            <div class="metric-header">
+                                                <span class="metric-label">Memory</span>
+                                                <span class="metric-value">8%</span>
+                                            </div>
+                                            <div class="metric-bar">
+                                                <div class="metric-fill memory" style="width: 8%"></div>
+                                            </div>
+                                        </div>
+                                    </div>
+
+                                    <div class="agent-stats">
+                                        <div class="agent-stat-item">
+                                            <i class="fas fa-file-code"></i>
+                                            <span>0 in queue</span>
+                                        </div>
+                                        <div class="agent-stat-item">
+                                            <i class="fas fa-check-circle"></i>
+                                            <span>Last:  2h ago</span>
+                                        </div>
+                                    </div>
+                                </div>
+
+                                <div class="agent-card-footer">
+                                    <button class="agent-btn" title="View Details">
+                                        <i class="fas fa-eye"></i>
+                                    </button>
+                                    <button class="agent-btn" title="Configure">
+                                        <i class="fas fa-cog"></i>
+                                    </button>
+                                    <button class="agent-btn" title="Logs">
+                                        <i class="fas fa-file-alt"></i>
+                                    </button>
+                                    <button class="agent-btn start" title="Start">
+                                        <i class="fas fa-play"></i>
+                                    </button>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Right Sidebar -->
+                    <div class="agents-sidebar">
+                        <!-- Agent Activity Feed -->
+                        <div class="sidebar-card">
+                            <div class="sidebar-card-header">
+                                <h4><i class="fas fa-stream"></i> Agent Activity</h4>
+                                <span class="live-badge">
+                                    <span class="live-dot"></span>
+                                    Live
+                                </span>
+                            </div>
+                            <div class="activity-feed" id="agentActivityFeed">
+                                <div class="activity-item">
+                                    <div class="activity-icon success">
+                                        <i class="fas fa-shield-alt"></i>
+                                    </div>
+                                    <div class="activity-content">
+                                        <p><strong>Guardian-04</strong> blocked malware attempt</p>
+                                        <span class="activity-time">Just now</span>
+                                    </div>
+                                </div>
+                                <div class="activity-item">
+                                    <div class="activity-icon warning">
+                                        <i class="fas fa-search"></i>
+                                    </div>
+                                    <div class="activity-content">
+                                        <p><strong>Hunter-02</strong> found suspicious file</p>
+                                        <span class="activity-time">2 min ago</span>
+                                    </div>
+                                </div>
+                                <div class="activity-item">
+                                    <div class="activity-icon info">
+                                        <i class="fas fa-brain"></i>
+                                    </div>
+                                    <div class="activity-content">
+                                        <p><strong>Neural-03</strong> completed epoch 144</p>
+                                        <span class="activity-time">5 min ago</span>
+                                    </div>
+                                </div>
+                                <div class="activity-item">
+                                    <div class="activity-icon success">
+                                        <i class="fas fa-eye"></i>
+                                    </div>
+                                    <div class="activity-content">
+                                        <p><strong>Sentinel-01</strong> detected port scan</p>
+                                        <span class="activity-time">8 min ago</span>
+                                    </div>
+                                </div>
+                                <div class="activity-item">
+                                    <div class="activity-icon warning">
+                                        <i class="fas fa-user-secret"></i>
+                                    </div>
+                                    <div class="activity-content">
+                                        <p><strong>Watcher-05</strong> flagged unusual login</p>
+                                        <span class="activity-time">12 min ago</span>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- Performance Chart -->
+                        <div class="sidebar-card">
+                            <div class="sidebar-card-header">
+                                <h4><i class="fas fa-chart-area"></i> Fleet Performance</h4>
+                            </div>
+                            <div class="performance-chart">
+                                <svg viewBox="0 0 300 150" id="performanceChart">
+                                    <defs>
+                                        <linearGradient id="perfGradient" x1="0%" y1="0%" x2="0%" y2="100%">
+                                            <stop offset="0%" style="stop-color: var(--accent-primary);stop-opacity:0.3"/>
+                                            <stop offset="100%" style="stop-color:var(--accent-primary);stop-opacity:0"/>
+                                        </linearGradient>
+                                    </defs>
+                                    <path class="chart-area" fill="url(#perfGradient)" d="M0,120 L30,100 L60,110 L90,80 L120,90 L150,60 L180,70 L210,50 L240,55 L270,40 L300,45 L300,150 L0,150 Z"/>
+                                    <path class="chart-line" fill="none" stroke="var(--accent-primary)" stroke-width="2" d="M0,120 L30,100 L60,110 L90,80 L120,90 L150,60 L180,70 L210,50 L240,55 L270,40 L300,45"/>
+                                </svg>
+                                <div class="chart-labels">
+                                    <span>1h</span>
+                                    <span>30m</span>
+                                    <span>Now</span>
+                                </div>
+                            </div>
+                            <div class="performance-stats">
+                                <div class="perf-stat">
+                                    <span class="perf-label">Avg CPU</span>
+                                    <span class="perf-value">47%</span>
+                                </div>
+                                <div class="perf-stat">
+                                    <span class="perf-label">Avg Memory</span>
+                                    <span class="perf-value">52%</span>
+                                </div>
+                                <div class="perf-stat">
+                                    <span class="perf-label">Efficiency</span>
+                                    <span class="perf-value green">98. 2%</span>
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- Quick Actions -->
+                        <div class="sidebar-card">
+                            <div class="sidebar-card-header">
+                                <h4><i class="fas fa-bolt"></i> Quick Actions</h4>
+                            </div>
+                            <div class="quick-actions">
+                                <button class="quick-action-btn">
+                                    <i class="fas fa-play"></i>
+                                    <span>Start All</span>
+                                </button>
+                                <button class="quick-action-btn">
+                                    <i class="fas fa-pause"></i>
+                                    <span>Pause All</span>
+                                </button>
+                                <button class="quick-action-btn">
+                                    <i class="fas fa-sync"></i>
+                                    <span>Restart Fleet</span>
+                                </button>
+                                <button class="quick-action-btn">
+                                    <i class="fas fa-download"></i>
+                                    <span>Update Models</span>
+                                </button>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </main>
+    </div>
+
+    <!-- Create Agent Modal -->
+    <div class="modal-overlay" id="createAgentModal">
+        <div class="modal">
+            <div class="modal-header">
+                <h3><i class="fas fa-robot"></i> Deploy New Agent</h3>
+                <button class="modal-close" id="closeModal">
+                    <i class="fas fa-times"></i>
+                </button>
+            </div>
+            <div class="modal-body">
+                <div class="form-group">
+                    <label>Agent Name</label>
+                    <input type="text" placeholder="Enter agent name..." id="agentName">
+                </div>
+                <div class="form-group">
+                    <label>Agent Type</label>
+                    <select id="agentType">
+                        <option value="">Select type... </option>
+                        <option value="monitor">Network Monitor</option>
+                        <option value="hunter">Threat Hunter</option>
+                        <option value="analyzer">Malware Analyzer</option>
+                        <option value="defender">Active Defense</option>
+                        <option value="behavior">Behavior Analysis</option>
+                    </select>
+                </div>
+                <div class="form-group">
+                    <label>Description</label>
+                    <textarea placeholder="Agent description..." id="agentDescription"></textarea>
+                </div>
+                <div class="form-group">
+                    <label>Resource Allocation</label>
+                    <div class="resource-sliders">
+                        <div class="slider-group">
+                            <label>CPU Limit</label>
+                            <input type="range" min="10" max="100" value="50" id="cpuLimit">
+                            <span class="slider-value">50%</span>
+                        </div>
+                        <div class="slider-group">
+                            <label>Memory Limit</label>
+                            <input type="range" min="10" max="100" value="50" id="memoryLimit">
+                            <span class="slider-value">50%</span>
+                        </div>
+                    </div>
+                </div>
+                <div class="form-group">
+                    <label>Auto-Start</label>
+                    <div class="toggle-switch">
+                        <input type="checkbox" id="autoStart" checked>
+                        <label for="autoStart"></label>
+                        <span>Start immediately after deployment</span>
+                    </div>
+                </div>
+            </div>
+            <div class="modal-footer">
+                <button class="btn-cancel" id="cancelCreate">Cancel</button>
+                <button class="btn-create">
+                    <i class="fas fa-rocket"></i> Deploy Agent
+                </button>
+            </div>
+        </div>
+    </div>
+
+    <!-- JavaScript -->
+    <script src="ai-agents.js"></script>
+</body>
+</html>
