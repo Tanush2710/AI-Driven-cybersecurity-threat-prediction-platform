@@ -10,6 +10,12 @@
     
     <!-- Font Awesome Icons -->
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+
+    <link
+    rel="stylesheet"
+    href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css"
+/>
+<script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
     
     <style>
         /* ============================================
@@ -917,6 +923,7 @@ body {
     grid-column: span 8;
 }
 
+
 .world-map {
     position: relative;
     height: 280px;
@@ -1655,15 +1662,8 @@ body {
                         </div>
                         <div class="card-body">
                             <div class="world-map">
-                                <svg viewBox="0 0 1000 500" id="mapSvg">
-                                    <path class="continent" d="M150,120 Q200,100 250,110 L280,130 Q300,150 280,180 L250,200 Q200,220 170,200 L140,170 Q130,140 150,120Z"/>
-                                    <path class="continent" d="M300,100 Q400,80 500,90 L550,120 Q600,150 580,200 L520,250 Q450,280 380,260 L320,220 Q280,180 300,100Z"/>
-                                    <path class="continent" d="M520,180 Q580,160 650,170 L720,200 Q780,230 760,290 L700,340 Q620,380 560,350 L500,300 Q480,250 520,180Z"/>
-                                    <path class="continent" d="M200,250 Q280,230 340,260 L380,300 Q400,350 360,400 L280,420 Q200,430 160,380 L150,320 Q160,270 200,250Z"/>
-                                    <path class="continent" d="M750,280 Q820,260 880,290 L920,340 Q950,400 900,450 L820,470 Q740,480 700,430 L680,370 Q700,310 750,280Z"/>
-                                </svg>
-                                <div class="attack-points" id="attackPoints"></div>
-                            </div>
+                                <div id="threatMap" style="height: 280px; width: 100%;"></div>
+                                    </div>
                             <div class="map-legend">
                                 <div class="legend-item"><span class="dot critical"></span> Critical</div>
                                 <div class="legend-item"><span class="dot high"></span> High</div>
@@ -1672,6 +1672,15 @@ body {
                             </div>
                         </div>
                     </div>
+
+                    /* Leaflet map theme tweaks */
+                        #threatMap {
+                        border-radius: var(--border-radius-sm);
+                        }
+
+                        .leaflet-container {
+                        background: var(--bg-secondary);
+                        }
 
                     <!-- AI Agents -->
                     <div class="card card-agents">
@@ -1800,6 +1809,19 @@ body {
                         </div>
                     </div>
                 </div>
+            <section id="integration-demo" style="margin-top:20px;">
+            <h2>Threat Detection (Connected to Backend)</h2>
+
+            <textarea id="trafficInput" rows="6" cols="80"
+                placeholder="Paste traffic logs here..."></textarea>
+            <br><br>
+
+            <button id="analyzeBtn">Analyze</button>
+
+            <h3>Result:</h3>
+            <pre id="resultBox" style="background:#111;color:#0f0;padding:12px;"></pre>
+            </section>
+    
             </div>
         </main>
     </div>
@@ -1812,7 +1834,7 @@ body {
 document.addEventListener('DOMContentLoaded', function() {
     initParticles();
     initCounters();
-    initAttackPoints();
+    initThreatMap();        // NEW
     initLiveActivityFeed();
     initNavigation();
 });
@@ -2003,6 +2025,51 @@ function addNewActivity(activity) {
     updateActivityTimes();
 }
 
+function initThreatMap() {
+    const mapEl = document.getElementById("threatMap");
+    if (!mapEl) return;
+
+    // Create the map
+    const map = L.map("threatMap", {
+        zoomControl: true,
+        attributionControl: true
+    }).setView([20, 0], 2);
+
+    // Add OpenStreetMap tiles
+    L.tileLayer("https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png", {
+        maxZoom: 18,
+        attribution: '&copy; OpenStreetMap contributors'
+    }).addTo(map);
+
+    // Demo threat events (later we can fetch from backend)
+    const threatEvents = [
+        { country: "USA", lat: 37.7749, lng: -122.4194, severity: "high", type: "DDoS" },
+        { country: "India", lat: 28.6139, lng: 77.2090, severity: "medium", type: "Phishing" },
+        { country: "Germany", lat: 52.52, lng: 13.405, severity: "low", type: "Malware" }
+    ];
+
+    function colorBySeverity(sev) {
+        if (sev === "critical") return "#ef4444";
+        if (sev === "high") return "#f97316";
+        if (sev === "medium") return "#eab308";
+        return "#22c55e";
+    }
+
+    threatEvents.forEach(ev => {
+        const circle = L.circle([ev.lat, ev.lng], {
+            color: colorBySeverity(ev.severity),
+            fillColor: colorBySeverity(ev.severity),
+            fillOpacity: 0.35,
+            radius: ev.severity === "high" ? 500000 : ev.severity === "medium" ? 350000 : 250000
+        }).addTo(map);
+
+        circle.bindPopup(`
+          <b>${ev.country}</b><br/>
+          Type: ${ev.type}<br/>
+          Severity: ${ev.severity}
+        `);
+    });
+}
 function updateActivityTimes() {
     const items = document.querySelectorAll('.activity-item: not(: first-child) .activity-time');
     const times = ['1 min ago', '3 min ago', '5 min ago', '8 min ago', '12 min ago', '15 min ago', '20 min ago', '25 min ago', '30 min ago'];
@@ -2052,6 +2119,41 @@ style.textContent = '@keyframes slideIn { from { opacity: 0; transform: translat
 document.head. appendChild(style);
 
 console.log('Dashboard initialized successfully!');
+
+        // ===============================
+        // Backend Threat Detection
+        // ===============================
+
+        const API_BASE = "http://localhost:8000";
+
+        async function analyzeTraffic() {
+        const traffic_data = document.getElementById("trafficInput").value;
+        const resultBox = document.getElementById("resultBox");
+
+        resultBox.textContent = "Loading...";
+
+        try {
+            const res = await fetch(`${API_BASE}/api/threat-detect`, {
+            method: "POST",
+            headers: { "Content-Type": "application/json" },
+            body: JSON.stringify({ traffic_data })
+            });
+
+            if (!res.ok) {
+            const text = await res.text();
+            throw new Error(`HTTP ${res.status}: ${text}`);
+            }
+
+            const data = await res.json();
+            resultBox.textContent = JSON.stringify(data, null, 2);
+        } catch (err) {
+            resultBox.textContent = "Error: " + err.message;
+        }
+        }
+
+        document.getElementById("analyzeBtn")
+        ?.addEventListener("click", analyzeTraffic);
+
 </script>
 </body>
 </html>
