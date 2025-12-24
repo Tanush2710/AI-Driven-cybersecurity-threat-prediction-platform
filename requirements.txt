@@ -7,3 +7,7 @@ pyzmq
 openai
 pika          
 requests
+fastapi
+uvicorn
+supabase
+python-dotenv  
