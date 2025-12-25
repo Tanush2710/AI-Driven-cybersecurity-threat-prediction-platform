@@ -3,15 +3,18 @@ import pika
 import json
 
 class ComplianceMonitoringAgent:
-    def __init__(self, context, channel):
+    def __init__(self, context=None, channel=None):
         self.context = context
         self.channel = channel
-        self.socket = self.context.socket(zmq.SUB)
-        self.socket.connect("tcp://localhost:5558")
-        self.socket.setsockopt_string(zmq.SUBSCRIBE, '')
+        
+        if self.context:
+            self.socket = self.context.socket(zmq.SUB)
+            self.socket.connect("tcp://localhost:5558")
+            self.socket.setsockopt_string(zmq.SUBSCRIBE, '')
 
-        self.channel.queue_declare(queue='compliance_queue')
-        self.channel.basic_consume(queue='compliance_queue', on_message_callback=self.on_message, auto_ack=True)
+        if self.channel:
+            self.channel.queue_declare(queue='compliance_queue')
+            self.channel.basic_consume(queue='compliance_queue', on_message_callback=self.on_message, auto_ack=True)
 
     def monitor_compliance(self, system_data):
         # Placeholder for compliance monitoring logic

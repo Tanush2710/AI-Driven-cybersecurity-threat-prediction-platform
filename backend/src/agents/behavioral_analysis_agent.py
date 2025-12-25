@@ -4,19 +4,22 @@ import pika
 import json
 
 class BehavioralAnalysisAgent:
-    def __init__(self, context, channel):
+    def __init__(self, context=None, channel=None):
         self.context = context
         self.channel = channel
-        self.socket = self.context.socket(zmq.SUB)
-        self.socket.connect("tcp://localhost:5558")
-        self.socket.setsockopt_string(zmq.SUBSCRIBE, '')
+        
+        if self.context:
+            self.socket = self.context.socket(zmq.SUB)
+            self.socket.connect("tcp://localhost:5558")
+            self.socket.setsockopt_string(zmq.SUBSCRIBE, '')
 
-        self.channel.queue_declare(queue='behavioral_queue')
-        self.channel.basic_consume(queue='behavioral_queue', on_message_callback=self.on_message, auto_ack=True)
+        if self.channel:
+            self.channel.queue_declare(queue='behavioral_queue')
+            self.channel.basic_consume(queue='behavioral_queue', on_message_callback=self.on_message, auto_ack=True)
 
     def analyze_behavior(self, behavior_data):
         response = openai.Completion.create(
-            engine="davinci-codex",
+            engine="Meta-Llama-3.1-8B-Instruct",
             prompt=f"Analyze the following user and system behavior data for anomalies:\n{behavior_data}\nAnomalies:",
             max_tokens=50
         )

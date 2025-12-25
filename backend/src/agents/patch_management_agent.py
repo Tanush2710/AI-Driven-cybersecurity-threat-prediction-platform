@@ -4,19 +4,22 @@ import pika
 import json
 
 class PatchManagementAgent:
-    def __init__(self, context, channel):
+    def __init__(self, context=None, channel=None):
         self.context = context
         self.channel = channel
-        self.socket = self.context.socket(zmq.SUB)
-        self.socket.connect("tcp://localhost:5558")
-        self.socket.setsockopt_string(zmq.SUBSCRIBE, '')
+        
+        if self.context:
+            self.socket = self.context.socket(zmq.SUB)
+            self.socket.connect("tcp://localhost:5558")
+            self.socket.setsockopt_string(zmq.SUBSCRIBE, '')
 
-        self.channel.queue_declare(queue='patch_queue')
-        self.channel.basic_consume(queue='patch_queue', on_message_callback=self.on_message, auto_ack=True)
+        if self.channel:
+            self.channel.queue_declare(queue='patch_queue')
+            self.channel.basic_consume(queue='patch_queue', on_message_callback=self.on_message, auto_ack=True)
 
     def identify_patches(self, vulnerability_data):
         response = openai.Completion.create(
-            engine="davinci-codex",
+            engine="Meta-Llama-3.1-8B-Instruct",
             prompt=f"Identify patches for the following vulnerabilities:\n{vulnerability_data}\nPatches:",
             max_tokens=50
         )
@@ -25,7 +28,7 @@ class PatchManagementAgent:
 
     def test_patches(self, patches):
         response = openai.Completion.create(
-            engine="davinci-codex",
+            engine="Meta-Llama-3.1-8B-Instruct",
             prompt=f"Test the following patches:\n{patches}\nTest Results:",
             max_tokens=50
         )
@@ -34,7 +37,7 @@ class PatchManagementAgent:
 
     def deploy_patches(self, test_results):
         response = openai.Completion.create(
-            engine="davinci-codex",
+            engine="Meta-Llama-3.1-8B-Instruct",
             prompt=f"Deploy the following patches based on test results:\n{test_results}\nDeployment Status:",
             max_tokens=50
         )

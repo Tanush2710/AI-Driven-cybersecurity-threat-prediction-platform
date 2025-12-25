@@ -2,10 +2,13 @@ import zmq
 import json
 
 class DeceptionAgent:
-    def __init__(self, context):
+    def __init__(self, context=None):
         self.context = context
-        self.socket = self.context.socket(zmq.PUB)
-        self.socket.bind("tcp://*:5558")
+        if self.context:
+            self.socket = self.context.socket(zmq.PUB)
+            self.socket.bind("tcp://*:5558")
+        else:
+            self.socket = None
 
     def deploy_honeypot(self, honeypot_data):
         # Deploy honeypot based on provided data

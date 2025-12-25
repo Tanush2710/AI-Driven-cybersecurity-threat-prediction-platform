@@ -4,19 +4,22 @@ import pika
 import json
 
 class IncidentResponseAgent:
-    def __init__(self, context, channel):
+    def __init__(self, context=None, channel=None):
         self.context = context
         self.channel = channel
-        self.socket = self.context.socket(zmq.SUB)
-        self.socket.connect("tcp://localhost:5556")
-        self.socket.setsockopt_string(zmq.SUBSCRIBE, '')
+        
+        if self.context:
+            self.socket = self.context.socket(zmq.SUB)
+            self.socket.connect("tcp://localhost:5556")
+            self.socket.setsockopt_string(zmq.SUBSCRIBE, '')
 
-        self.channel.queue_declare(queue='incident_queue')
-        self.channel.basic_consume(queue='incident_queue', on_message_callback=self.on_message, auto_ack=True)
+        if self.channel:
+            self.channel.queue_declare(queue='incident_queue')
+            self.channel.basic_consume(queue='incident_queue', on_message_callback=self.on_message, auto_ack=True)
 
     def respond_to_threat(self, threat_data):
         response = openai.Completion.create(
-            engine="davinci-codex",
+            engine="Meta-Llama-3.1-8B-Instruct",
             prompt=f"Respond to the following threat data:\n{threat_data}\nResponse:",
             max_tokens=50
         )
