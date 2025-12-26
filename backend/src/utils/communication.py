@@ -1,26 +1,27 @@
-import zmq
-import pika
+import asyncio
+from typing import Any
+
+try:
+    from ws_manager import ws_manager
+except Exception:
+    ws_manager = None
+
 
 class Communication:
     def __init__(self):
-        self.context = zmq.Context()
-        self.socket = self.context.socket(zmq.PUB)
-        self.socket.bind("tcp://*:5555")
+        pass
 
-        self.connection = pika.BlockingConnection(pika.ConnectionParameters('localhost'))
-        self.channel = self.connection.channel()
-        self.channel.queue_declare(queue='agent_queue')
+    def send_message(self, message: Any):
+        payload = {"event": "message", "payload": message}
+        if ws_manager:
+            try:
+                asyncio.create_task(ws_manager.broadcast(payload))
+                return
+            except Exception:
+                pass
 
-    def send_message(self, message):
-        # Send message via ZeroMQ
-        self.socket.send_string(message)
-
-        # Send message via RabbitMQ
-        self.channel.basic_publish(exchange='',
-                                   routing_key='agent_queue',
-                                   body=message)
+        # Fallback
+        print("Communication fallback - message:", message)
 
     def close(self):
-        self.socket.close()
-        self.context.term()
-        self.connection.close()
+        return

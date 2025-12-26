@@ -1,27 +1,37 @@
-import openai
-import zmq
-import pika
+import os
 import json
+import asyncio
+try:
+    import google.genai as genai
+    genai_client = genai.Client(api_key=os.environ.get("GEMINI_API_KEY"))
+except Exception:
+    genai = None
+    genai_client = None
+
+try:
+    from ws_manager import ws_manager
+except Exception:
+    ws_manager = None
 
 class IncidentResponseAgent:
-    def __init__(self, context, channel):
-        self.context = context
-        self.channel = channel
-        self.socket = self.context.socket(zmq.SUB)
-        self.socket.connect("tcp://localhost:5556")
-        self.socket.setsockopt_string(zmq.SUBSCRIBE, '')
-
-        self.channel.queue_declare(queue='incident_queue')
-        self.channel.basic_consume(queue='incident_queue', on_message_callback=self.on_message, auto_ack=True)
+    def __init__(self, context=None, channel=None):
+        self.context = None
+        self.channel = None
 
     def respond_to_threat(self, threat_data):
-        response = openai.Completion.create(
-            engine="davinci-codex",
-            prompt=f"Respond to the following threat data:\n{threat_data}\nResponse:",
-            max_tokens=50
-        )
-        response_action = response.choices[0].text.strip()
-        return response_action
+        if not genai_client:
+            return "AI response unavailable"
+        try:
+            prompt = f"Respond to the following threat data:\n{threat_data}\nResponse:"
+            response = genai_client.models.generate_content(
+                model="gemini-1.5-flash",
+                contents=prompt
+            )
+            response_action = getattr(response, 'text', None) or str(response)
+            return response_action
+        except Exception as e:
+            print("IncidentResponseAgent Gemini error:", e)
+            return "AI response unavailable"
 
     def on_message(self, ch, method, properties, body):
         message = json.loads(body)
@@ -31,21 +41,20 @@ class IncidentResponseAgent:
             self.send_message(json.dumps({"response_action": response_action}))
 
     def send_message(self, message):
-        self.socket.send_string(message)
-        self.channel.basic_publish(exchange='',
-                                   routing_key='incident_queue',
-                                   body=message)
+        payload = {"event": "agent_message", "agent": "IncidentResponseAgent", "message": message}
+        if ws_manager:
+            try:
+                asyncio.create_task(ws_manager.broadcast(payload))
+                return
+            except Exception:
+                pass
+
+        print("IncidentResponseAgent message:", message)
 
     def start(self):
-        while True:
-            self.channel.start_consuming()
-            message = self.socket.recv_string()
-            print(f"Received message: {message}")
+        print("IncidentResponseAgent ready (no ZMQ/RabbitMQ).")
+
 
 if __name__ == "__main__":
-    context = zmq.Context()
-    connection = pika.BlockingConnection(pika.ConnectionParameters('localhost'))
-    channel = connection.channel()
-
-    agent = IncidentResponseAgent(context, channel)
+    agent = IncidentResponseAgent()
     agent.start()

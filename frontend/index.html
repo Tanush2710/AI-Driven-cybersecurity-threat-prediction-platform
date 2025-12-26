@@ -1812,7 +1812,7 @@ body {
     </div>
 
 <script>
-        // ============================================
+// ============================================
 // AI CyberGuard - Dashboard JavaScript
 // ============================================
 
@@ -1938,76 +1938,56 @@ function addNewAttackPoint(container) {
 }
 
 // ============================================
-// Live Activity Feed
+// Live Activity Feed (Real Data)
 // ============================================
 function initLiveActivityFeed() {
-    const activities = [
-        {
-            icon: 'fa-shield-alt',
-            type: 'success',
-            message: '<strong>Agent Guardian-04</strong> blocked malware attempt',
-            time:  'Just now'
-        },
-        {
-            icon:  'fa-user-secret',
-            type:  'warning',
-            message: '<strong>Suspicious login</strong> attempt detected',
-            time: 'Just now'
-        },
-        {
-            icon: 'fa-database',
-            type:  'info',
-            message: '<strong>Database backup</strong> completed successfully',
-            time:  'Just now'
-        },
-        {
-            icon:  'fa-bug',
-            type:  'warning',
-            message:  '<strong>Zero-day vulnerability</strong> detected',
-            time:  'Just now'
-        },
-        {
-            icon:  'fa-robot',
-            type:  'info',
-            message: '<strong>Agent Hunter-02</strong> initiated deep scan',
-            time: 'Just now'
-        }
-    ];
-    
-    let activityIndex = 0;
-    
-    setInterval(() => {
-        addNewActivity(activities[activityIndex % activities.length]);
-        activityIndex++;
-    }, 8000);
+    // Initial fetch
+    fetchActivityFeed();
+
+    // Poll every 5 seconds
+    setInterval(fetchActivityFeed, 5000);
 }
 
-function addNewActivity(activity) {
-    const feed = document.getElementById('activityFeed');
-    if (!feed) return;
-    
-    const item = document.createElement('div');
-    item.className = 'activity-item';
-    item.style. animation = 'slideIn 0.3s ease';
-    item.innerHTML = 
-        '<div class="activity-icon ' + activity.type + '">' +
-            '<i class="fas ' + activity.icon + '"></i>' +
-        '</div>' +
-        '<div class="activity-content">' +
-            '<p>' + activity.message + '</p>' +
-            '<span class="activity-time">' + activity. time + '</span>' +
-        '</div>';
-    
-    feed.insertBefore(item, feed.firstChild);
-    
-    // Remove old items if too many
-    const items = feed.querySelectorAll('.activity-item');
-    if (items.length > 10) {
-        items[items.length - 1].remove();
+async function fetchActivityFeed() {
+    try {
+        const res = await fetch('http://localhost:8000/api/activity-feed');
+        if (!res.ok) return;
+        const activities = await res.json();
+        
+        // Clear current feed to avoid duplicates (simplest approach for now, 
+        // ideally we would only append new items)
+        const feed = document.getElementById('activityFeed');
+        if (!feed) return;
+        
+        feed.innerHTML = ''; 
+        activities.forEach(activity => {
+             // Map backend type to frontend class
+             const typeClass = activity.type === 'error' ? 'warning' : activity.type; 
+             const iconClass = activity.type === 'error' || activity.type === 'warning' ? 'fa-exclamation' : 'fa-shield-alt';
+             
+             const timeStr = new Date(activity.created_at).toLocaleTimeString();
+
+             const item = document.createElement('div');
+             item.className = 'activity-item';
+             item.innerHTML = 
+                '<div class="activity-icon ' + typeClass + '">' +
+                    '<i class="fas ' + iconClass + '"></i>' +
+                '</div>' +
+                '<div class="activity-content">' +
+                    '<p><strong>' + activity.agent_name + '</strong>: ' + activity.message + '</p>' +
+                    '<span class="activity-time">' + timeStr + '</span>' +
+                '</div>';
+             feed.appendChild(item);
+        });
+
+    } catch (e) {
+        console.error("Failed to fetch activity feed", e);
     }
-    
-    // Update times for existing items
-    updateActivityTimes();
+}
+
+// Deprecated: addNewActivity is replaced by fetchActivityFeed re-rendering
+function addNewActivity(activity) {
+   // Kept empty to satisfy any lingering references if any
 }
 
 function initThreatMap() {
@@ -2121,7 +2101,11 @@ console.log('Dashboard initialized successfully!');
             const res = await fetch(`${API_BASE}/api/threat-detect`, {
             method: "POST",
             headers: { "Content-Type": "application/json" },
-            body: JSON.stringify({ traffic_data })
+            body: JSON.stringify({ 
+                traffic_data: traffic_data,
+                source_ip: "Dashboard-Manual",
+                protocol: "HTTP"
+            })
             });
 
             if (!res.ok) {
@@ -2140,5 +2124,60 @@ console.log('Dashboard initialized successfully!');
         ?.addEventListener("click", analyzeTraffic);
 
 </script>
+        <script>
+        const WS_URL = "ws://localhost:8000/ws/dashboard";
+        let ws;
+
+        function connectDashboardWS() {
+            ws = new WebSocket(WS_URL);
+
+            ws.onopen = () => console.log("Dashboard WebSocket connected");
+
+            ws.onmessage = (event) => {
+                const data = JSON.parse(event.data);
+
+                if (data.event === "activity") {
+                    prependActivity(data);
+                }
+
+                if (data.event === "threat") {
+                    updateThreatBanner(data);
+                }
+            };
+
+            ws.onclose = () => {
+                console.warn("WS disconnected. Reconnecting...");
+                setTimeout(connectDashboardWS, 3000);
+            };
+        }
+
+        function prependActivity(activity) {
+            const feed = document.getElementById("activityFeed");
+            if (!feed) return;
+
+            const item = document.createElement("div");
+            item.className = "activity-item";
+            item.innerHTML = `
+                <div class="activity-icon ${activity.type}">
+                    <i class="fas fa-exclamation"></i>
+                </div>
+                <div class="activity-content">
+                    <p><strong>${activity.agent_name}</strong>: ${activity.message}</p>
+                    <span class="activity-time">Now</span>
+                </div>
+            `;
+            feed.prepend(item);
+        }
+
+        function updateThreatBanner(data) {
+            const threatValue = document.querySelector(".threat-value");
+            if (!threatValue) return;
+
+            let current = parseInt(threatValue.textContent);
+            threatValue.textContent = Math.min(95, current + 5);
+        }
+
+        connectDashboardWS();
+        </script>
 </body>
 </html>

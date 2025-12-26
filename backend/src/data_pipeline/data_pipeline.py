@@ -1,14 +1,16 @@
-import zmq
-import pika
 import json
 import requests
+import asyncio
+
+try:
+    from ws_manager import ws_manager
+except Exception:
+    ws_manager = None
+
 
 class DataPipeline:
     def __init__(self):
-        self.context = zmq.Context()
-        self.connection = pika.BlockingConnection(pika.ConnectionParameters('localhost'))
-        self.channel = self.connection.channel()
-        self.channel.queue_declare(queue='data_queue')
+        pass
 
     def fetch_threat_intelligence(self, url):
         response = requests.get(url)
@@ -23,21 +25,22 @@ class DataPipeline:
         return processed_data
 
     def send_data(self, data):
-        # Send data via ZeroMQ
-        socket = self.context.socket(zmq.PUB)
-        socket.bind("tcp://*:5556")
-        socket.send_string(data)
+        payload = {"event": "pipeline", "data": data}
+        if ws_manager:
+            try:
+                asyncio.create_task(ws_manager.broadcast(payload))
+                return
+            except Exception:
+                pass
 
-        # Send data via RabbitMQ
-        self.channel.basic_publish(exchange='',
-                                   routing_key='data_queue',
-                                   body=data)
+        print("Data pipeline fallback:", data)
 
     def run_pipeline(self, url):
         data = self.fetch_threat_intelligence(url)
         if data:
             processed_data = self.process_data(data)
             self.send_data(processed_data)
+
 
 if __name__ == "__main__":
     pipeline = DataPipeline()
