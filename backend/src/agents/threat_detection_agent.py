@@ -1,46 +1,40 @@
 import os
 import json
-try:
-    import openai
-except ImportError:
-    openai = None
-import zmq
-import pika
-import json
+import asyncio
 from src.ml_model import ThreatModel
+
+try:
+    import google.genai as genai
+    genai_client = genai.Client(api_key=os.environ.get("GEMINI_API_KEY"))
+except Exception:
+    genai = None
+    genai_client = None
+
+try:
+    from ws_manager import ws_manager
+except Exception:
+    ws_manager = None
 
 class ThreatDetectionAgent:
     def __init__(self, context=None, channel=None):
-        self.context = context
-        self.channel = channel
+        self.context = None
+        self.channel = None
         self.model = ThreatModel()
-        
-        # Only setup ZMQ if context is provided (Agent Mode)
-        if self.context:
-            self.socket = self.context.socket(zmq.SUB)
-            self.socket.connect("tcp://localhost:5555")
-            self.socket.setsockopt_string(zmq.SUBSCRIBE, '')
-
-        # Only setup RabbitMQ if channel is provided
-        if self.channel:
-            self.channel.queue_declare(queue='agent_queue')
-            self.channel.basic_consume(queue='agent_queue', on_message_callback=self.on_message, auto_ack=True)
 
     def analyze_traffic(self, traffic_data):
-        # Fallback if OpenAI is not configured or fails
-        if not openai or not os.environ.get("OPENAI_API_KEY"):
+        if not genai_client:
             return self._heuristic_analysis(traffic_data)
 
         try:
-            response = openai.Completion.create(
-                engine="Meta-Llama-3.1-8B-Instruct", 
-                prompt=f"Analyze the following network traffic data for potential threats:\n{traffic_data}\nThreats:",
-                max_tokens=50
+            prompt = f"Analyze the following network traffic data for potential threats:\n{traffic_data}\nThreats:"
+            response = genai_client.models.generate_content(
+                model="gemini-1.5-flash",
+                contents=prompt
             )
-            threats = response.choices[0].text.strip()
+            threats = getattr(response, 'text', None) or str(response)
             return threats
         except Exception as e:
-            print(f"AI Analysis failed: {e}")
+            print(f"Gemini analysis failed: {e}")
             return self._heuristic_analysis(traffic_data)
 
     def _heuristic_analysis(self, traffic_data):
@@ -70,26 +64,20 @@ class ThreatDetectionAgent:
             self.send_message(json.dumps({"threats": threats}))
 
     def send_message(self, message):
-        if self.socket:
-            self.socket.send_string(message)
-        if self.channel:
-            self.channel.basic_publish(exchange='',
-                                   routing_key='agent_queue',
-                                   body=message)
+        payload = {"event": "agent_message", "agent": "ThreatDetectionAgent", "message": message}
+        if ws_manager:
+            try:
+                asyncio.create_task(ws_manager.broadcast(payload))
+                return
+            except Exception:
+                pass
+
+        print("ThreatDetectionAgent message:", message)
 
     def start(self):
-        if self.channel and self.context:
-            print("Threat Detection Agent Started (Listening Mode)...")
-            while True:
-                self.channel.start_consuming()
-                if self.socket:
-                    message = self.socket.recv_string()
-                    print(f"Received message: {message}")
+        print("ThreatDetectionAgent ready (no ZMQ/RabbitMQ).")
+
 
 if __name__ == "__main__":
-    context = zmq.Context()
-    connection = pika.BlockingConnection(pika.ConnectionParameters('localhost'))
-    channel = connection.channel()
-
-    agent = ThreatDetectionAgent(context, channel)
+    agent = ThreatDetectionAgent()
     agent.start()

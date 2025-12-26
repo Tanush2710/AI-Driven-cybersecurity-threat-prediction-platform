@@ -3609,7 +3609,7 @@ async function runAgent(agentName, card) {
     updateAgentStatus(card, 'active');
     
     try {
-        const response = await fetch('http://localhost:5000/api/run-agent', {
+        const response = await fetch('http://localhost:8000/api/run-agent', {
             method: 'POST',
             headers: {
                 'Content-Type': 'application/json'
@@ -3647,7 +3647,7 @@ async function viewLogs(agentName) {
     showToast('Fetching logs for ' + agentName + '...');
     
     try {
-        const response = await fetch(`http://localhost:5000/api/agent-logs?agent_name=${encodeURIComponent(agentName)}`);
+        const response = await fetch(`http://localhost:8000/api/agent-logs?agent_name=${encodeURIComponent(agentName)}`);
         const logs = await response.json();
         
         // Format logs for display
@@ -3717,7 +3717,7 @@ function initActivityFeed() {
 
 async function fetchActivityFeed() {
     try {
-        const response = await fetch('http://localhost:5000/api/activity-feed');
+        const response = await fetch('http://localhost:8000/api/activity-feed');
         if (!response.ok) return;
         
         const activities = await response.json();

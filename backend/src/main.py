@@ -1,10 +1,14 @@
 import gymnasium as gym
 import ray
-import zmq
-import pika
 import json
 import warnings
 import time
+import asyncio
+
+try:
+    from ws_manager import ws_manager
+except Exception:
+    ws_manager = None
 
 warnings.filterwarnings("ignore", category=FutureWarning)
 
@@ -15,23 +19,7 @@ def initialize_system():
 
     # Ray
     ray.init(ignore_reinit_error=True)
-
-    # ZeroMQ
-    context = zmq.Context()
-
-    # RabbitMQ (kep in optional)
-    channel = None
-    try:
-        connection = pika.BlockingConnection(
-            pika.ConnectionParameters("localhost")
-        )
-        channel = connection.channel()
-        channel.queue_declare(queue="agent_queue")
-        print("RabbitMQ connected")
-    except pika.exceptions.AMQPConnectionError:
-        print("RabbitMQ not running — AMQP disabled")
-
-    return env, context, channel
+    return env, None, None
 
 
 # Agent Policy (TEMPORARY DUMMY)
@@ -47,21 +35,17 @@ def integrate_gym_agent(env):
 
 # Communication Layer
 def implement_communication_protocols(context, channel):
-    # ZeroMQ publisher
-    socket = context.socket(zmq.PUB)
-    socket.bind("tcp://*:5555")
-
+    # Legacy function kept for compatibility; do best-effort WS broadcast
     def send_message(message: str):
-        # Always send via ZeroMQ
-        socket.send_string(message)
+        payload = {"event": "system", "payload": message}
+        if ws_manager:
+            try:
+                asyncio.create_task(ws_manager.broadcast(payload))
+                return
+            except Exception:
+                pass
 
-        # Send via RabbitMQ only if available
-        if channel is not None:
-            channel.basic_publish(
-                exchange="",
-                routing_key="agent_queue",
-                body=message,
-            )
+        print("send_message fallback:", message)
 
     return send_message
 

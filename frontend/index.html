@@ -2101,7 +2101,11 @@ console.log('Dashboard initialized successfully!');
             const res = await fetch(`${API_BASE}/api/threat-detect`, {
             method: "POST",
             headers: { "Content-Type": "application/json" },
-            body: JSON.stringify({ traffic_data })
+            body: JSON.stringify({ 
+                traffic_data: traffic_data,
+                source_ip: "Dashboard-Manual",
+                protocol: "HTTP"
+            })
             });
 
             if (!res.ok) {
@@ -2120,5 +2124,60 @@ console.log('Dashboard initialized successfully!');
         ?.addEventListener("click", analyzeTraffic);
 
 </script>
+        <script>
+        const WS_URL = "ws://localhost:8000/ws/dashboard";
+        let ws;
+
+        function connectDashboardWS() {
+            ws = new WebSocket(WS_URL);
+
+            ws.onopen = () => console.log("Dashboard WebSocket connected");
+
+            ws.onmessage = (event) => {
+                const data = JSON.parse(event.data);
+
+                if (data.event === "activity") {
+                    prependActivity(data);
+                }
+
+                if (data.event === "threat") {
+                    updateThreatBanner(data);
+                }
+            };
+
+            ws.onclose = () => {
+                console.warn("WS disconnected. Reconnecting...");
+                setTimeout(connectDashboardWS, 3000);
+            };
+        }
+
+        function prependActivity(activity) {
+            const feed = document.getElementById("activityFeed");
+            if (!feed) return;
+
+            const item = document.createElement("div");
+            item.className = "activity-item";
+            item.innerHTML = `
+                <div class="activity-icon ${activity.type}">
+                    <i class="fas fa-exclamation"></i>
+                </div>
+                <div class="activity-content">
+                    <p><strong>${activity.agent_name}</strong>: ${activity.message}</p>
+                    <span class="activity-time">Now</span>
+                </div>
+            `;
+            feed.prepend(item);
+        }
+
+        function updateThreatBanner(data) {
+            const threatValue = document.querySelector(".threat-value");
+            if (!threatValue) return;
+
+            let current = parseInt(threatValue.textContent);
+            threatValue.textContent = Math.min(95, current + 5);
+        }
+
+        connectDashboardWS();
+        </script>
 </body>
 </html>

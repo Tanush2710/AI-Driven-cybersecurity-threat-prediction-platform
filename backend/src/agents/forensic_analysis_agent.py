@@ -1,30 +1,37 @@
-import openai
-import zmq
-import pika
+import os
 import json
+import asyncio
+try:
+    import google.genai as genai
+    genai_client = genai.Client(api_key=os.environ.get("GEMINI_API_KEY"))
+except Exception:
+    genai = None
+    genai_client = None
+
+try:
+    from ws_manager import ws_manager
+except Exception:
+    ws_manager = None
 
 class ForensicAnalysisAgent:
     def __init__(self, context=None, channel=None):
-        self.context = context
-        self.channel = channel
-        
-        if self.context:
-            self.socket = self.context.socket(zmq.SUB)
-            self.socket.connect("tcp://localhost:5558")
-            self.socket.setsockopt_string(zmq.SUBSCRIBE, '')
-
-        if self.channel:
-            self.channel.queue_declare(queue='forensic_queue')
-            self.channel.basic_consume(queue='forensic_queue', on_message_callback=self.on_message, auto_ack=True)
+        self.context = None
+        self.channel = None
 
     def perform_analysis(self, compromised_system_data):
-        response = openai.Completion.create(
-            engine="Meta-Llama-3.1-8B-Instruct",
-            prompt=f"Perform forensic analysis on the following compromised system data:\n{compromised_system_data}\nAnalysis:",
-            max_tokens=100
-        )
-        analysis_result = response.choices[0].text.strip()
-        return analysis_result
+        if not genai_client:
+            return "AI forensic analysis unavailable"
+        try:
+            prompt = f"Perform forensic analysis on the following compromised system data:\n{compromised_system_data}\nAnalysis:"
+            response = genai_client.models.generate_content(
+                model="gemini-1.5-flash",
+                contents=prompt
+            )
+            analysis_result = getattr(response, 'text', None) or str(response)
+            return analysis_result
+        except Exception as e:
+            print("ForensicAnalysisAgent Gemini error:", e)
+            return "AI forensic analysis unavailable"
 
     def on_message(self, ch, method, properties, body):
         message = json.loads(body)
@@ -34,21 +41,20 @@ class ForensicAnalysisAgent:
             self.send_message(json.dumps({"analysis_result": analysis_result}))
 
     def send_message(self, message):
-        self.socket.send_string(message)
-        self.channel.basic_publish(exchange='',
-                                   routing_key='forensic_queue',
-                                   body=message)
+        payload = {"event": "agent_message", "agent": "ForensicAnalysisAgent", "message": message}
+        if ws_manager:
+            try:
+                asyncio.create_task(ws_manager.broadcast(payload))
+                return
+            except Exception:
+                pass
+
+        print("ForensicAnalysisAgent message:", message)
 
     def start(self):
-        while True:
-            self.channel.start_consuming()
-            message = self.socket.recv_string()
-            print(f"Received message: {message}")
+        print("ForensicAnalysisAgent ready (no ZMQ/RabbitMQ).")
+
 
 if __name__ == "__main__":
-    context = zmq.Context()
-    connection = pika.BlockingConnection(pika.ConnectionParameters('localhost'))
-    channel = connection.channel()
-
-    agent = ForensicAnalysisAgent(context, channel)
+    agent = ForensicAnalysisAgent()
     agent.start()

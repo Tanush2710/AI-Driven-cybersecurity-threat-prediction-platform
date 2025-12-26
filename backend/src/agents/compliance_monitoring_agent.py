@@ -1,20 +1,16 @@
-import zmq
-import pika
 import json
+import asyncio
+
+try:
+    from ws_manager import ws_manager
+except Exception:
+    ws_manager = None
+
 
 class ComplianceMonitoringAgent:
     def __init__(self, context=None, channel=None):
-        self.context = context
-        self.channel = channel
-        
-        if self.context:
-            self.socket = self.context.socket(zmq.SUB)
-            self.socket.connect("tcp://localhost:5558")
-            self.socket.setsockopt_string(zmq.SUBSCRIBE, '')
-
-        if self.channel:
-            self.channel.queue_declare(queue='compliance_queue')
-            self.channel.basic_consume(queue='compliance_queue', on_message_callback=self.on_message, auto_ack=True)
+        self.context = None
+        self.channel = None
 
     def monitor_compliance(self, system_data):
         # Placeholder for compliance monitoring logic
@@ -29,21 +25,20 @@ class ComplianceMonitoringAgent:
             self.send_message(json.dumps({"compliance_status": compliance_status}))
 
     def send_message(self, message):
-        self.socket.send_string(message)
-        self.channel.basic_publish(exchange='',
-                                   routing_key='compliance_queue',
-                                   body=message)
+        payload = {"event": "agent_message", "agent": "ComplianceMonitoringAgent", "message": message}
+        if ws_manager:
+            try:
+                asyncio.create_task(ws_manager.broadcast(payload))
+                return
+            except Exception:
+                pass
+
+        print("ComplianceMonitoringAgent message:", message)
 
     def start(self):
-        while True:
-            self.channel.start_consuming()
-            message = self.socket.recv_string()
-            print(f"Received message: {message}")
+        print("ComplianceMonitoringAgent ready (no ZMQ/RabbitMQ).")
+
 
 if __name__ == "__main__":
-    context = zmq.Context()
-    connection = pika.BlockingConnection(pika.ConnectionParameters('localhost'))
-    channel = connection.channel()
-
-    agent = ComplianceMonitoringAgent(context, channel)
+    agent = ComplianceMonitoringAgent()
     agent.start()

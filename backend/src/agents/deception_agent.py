@@ -1,14 +1,15 @@
-import zmq
 import json
+import asyncio
+
+try:
+    from ws_manager import ws_manager
+except Exception:
+    ws_manager = None
+
 
 class DeceptionAgent:
     def __init__(self, context=None):
-        self.context = context
-        if self.context:
-            self.socket = self.context.socket(zmq.PUB)
-            self.socket.bind("tcp://*:5558")
-        else:
-            self.socket = None
+        self.context = None
 
     def deploy_honeypot(self, honeypot_data):
         # Deploy honeypot based on provided data
@@ -31,27 +32,25 @@ class DeceptionAgent:
         return attacker_tactics
 
     def send_message(self, message):
-        self.socket.send_string(message)
+        payload = {"event": "agent_message", "agent": "DeceptionAgent", "message": message}
+        if ws_manager:
+            try:
+                asyncio.create_task(ws_manager.broadcast(payload))
+                return
+            except Exception:
+                pass
+
+        print("DeceptionAgent message:", message)
 
     def start(self):
-        while True:
-            honeypot_data = self.get_honeypot_data()
-            honeypot_info = self.deploy_honeypot(honeypot_data)
-            self.send_message(json.dumps(honeypot_info))
-
-            attacker_data = self.get_attacker_data()
-            attacker_tactics = self.analyze_attacker_behavior(attacker_data)
-            self.send_message(json.dumps(attacker_tactics))
+        print("DeceptionAgent ready (no ZMQ).")
 
     def get_honeypot_data(self):
-        # Placeholder for obtaining honeypot data
         return "honeypot data"
 
     def get_attacker_data(self):
-        # Placeholder for obtaining attacker data
         return "attacker data"
 
 if __name__ == "__main__":
-    context = zmq.Context()
-    deception_agent = DeceptionAgent(context)
+    deception_agent = DeceptionAgent()
     deception_agent.start()

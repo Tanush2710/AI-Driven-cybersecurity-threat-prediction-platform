@@ -1,48 +1,67 @@
-import openai
-import zmq
-import pika
+import os
 import json
+import asyncio
+try:
+    import google.genai as genai
+    genai_client = genai.Client(api_key=os.environ.get("GEMINI_API_KEY"))
+except Exception:
+    genai = None
+    genai_client = None
+
+try:
+    from ws_manager import ws_manager
+except Exception:
+    ws_manager = None
 
 class PatchManagementAgent:
     def __init__(self, context=None, channel=None):
-        self.context = context
-        self.channel = channel
-        
-        if self.context:
-            self.socket = self.context.socket(zmq.SUB)
-            self.socket.connect("tcp://localhost:5558")
-            self.socket.setsockopt_string(zmq.SUBSCRIBE, '')
-
-        if self.channel:
-            self.channel.queue_declare(queue='patch_queue')
-            self.channel.basic_consume(queue='patch_queue', on_message_callback=self.on_message, auto_ack=True)
+        self.context = None
+        self.channel = None
 
     def identify_patches(self, vulnerability_data):
-        response = openai.Completion.create(
-            engine="Meta-Llama-3.1-8B-Instruct",
-            prompt=f"Identify patches for the following vulnerabilities:\n{vulnerability_data}\nPatches:",
-            max_tokens=50
-        )
-        patches = response.choices[0].text.strip()
-        return patches
+        if not genai_client:
+            return "AI patch identification unavailable"
+        try:
+            prompt = f"Identify patches for the following vulnerabilities:\n{vulnerability_data}\nPatches:"
+            response = genai_client.models.generate_content(
+                model="gemini-1.5-flash",
+                contents=prompt
+            )
+            patches = getattr(response, 'text', None) or str(response)
+            return patches
+        except Exception as e:
+            print("PatchManagementAgent Gemini error:", e)
+            return "AI patch identification unavailable"
 
     def test_patches(self, patches):
-        response = openai.Completion.create(
-            engine="Meta-Llama-3.1-8B-Instruct",
-            prompt=f"Test the following patches:\n{patches}\nTest Results:",
-            max_tokens=50
-        )
-        test_results = response.choices[0].text.strip()
-        return test_results
+        if not genai_client:
+            return "AI test unavailable"
+        try:
+            prompt = f"Test the following patches:\n{patches}\nTest Results:"
+            response = genai_client.models.generate_content(
+                model="gemini-1.5-flash",
+                contents=prompt
+            )
+            test_results = getattr(response, 'text', None) or str(response)
+            return test_results
+        except Exception as e:
+            print("PatchManagementAgent Gemini error:", e)
+            return "AI test unavailable"
 
     def deploy_patches(self, test_results):
-        response = openai.Completion.create(
-            engine="Meta-Llama-3.1-8B-Instruct",
-            prompt=f"Deploy the following patches based on test results:\n{test_results}\nDeployment Status:",
-            max_tokens=50
-        )
-        deployment_status = response.choices[0].text.strip()
-        return deployment_status
+        if not genai_client:
+            return "AI deployment unavailable"
+        try:
+            prompt = f"Deploy the following patches based on test results:\n{test_results}\nDeployment Status:"
+            response = genai_client.models.generate_content(
+                model="gemini-1.5-flash",
+                contents=prompt
+            )
+            deployment_status = getattr(response, 'text', None) or str(response)
+            return deployment_status
+        except Exception as e:
+            print("PatchManagementAgent Gemini error:", e)
+            return "AI deployment unavailable"
 
     def on_message(self, ch, method, properties, body):
         message = json.loads(body)
@@ -54,21 +73,20 @@ class PatchManagementAgent:
             self.send_message(json.dumps({"deployment_status": deployment_status}))
 
     def send_message(self, message):
-        self.socket.send_string(message)
-        self.channel.basic_publish(exchange='',
-                                   routing_key='patch_queue',
-                                   body=message)
+        payload = {"event": "agent_message", "agent": "PatchManagementAgent", "message": message}
+        if ws_manager:
+            try:
+                asyncio.create_task(ws_manager.broadcast(payload))
+                return
+            except Exception:
+                pass
+
+        print("PatchManagementAgent message:", message)
 
     def start(self):
-        while True:
-            self.channel.start_consuming()
-            message = self.socket.recv_string()
-            print(f"Received message: {message}")
+        print("PatchManagementAgent ready (no ZMQ/RabbitMQ).")
+
 
 if __name__ == "__main__":
-    context = zmq.Context()
-    connection = pika.BlockingConnection(pika.ConnectionParameters('localhost'))
-    channel = connection.channel()
-
-    agent = PatchManagementAgent(context, channel)
+    agent = PatchManagementAgent()
     agent.start()

@@ -4,12 +4,12 @@ import sys
 sys.path.append(os.path.dirname(os.path.abspath(__file__)))
 
 from datetime import datetime
-from fastapi import FastAPI, HTTPException, File, UploadFile
+import asyncio
+from fastapi import FastAPI, HTTPException, File, UploadFile, WebSocket, WebSocketDisconnect
 from fastapi.middleware.cors import CORSMiddleware
 from pydantic import BaseModel
 from supabase import create_client, Client
 from dotenv import load_dotenv
-import openai
 
 # Load environment
 current_dir = os.path.dirname(os.path.abspath(__file__))
@@ -25,29 +25,36 @@ from src.agents.forensic_analysis_agent import ForensicAnalysisAgent
 from src.agents.patch_management_agent import PatchManagementAgent
 from src.agents.patch_management_agent import PatchManagementAgent
 from src.agents.deception_agent import DeceptionAgent
-from src.ml_model import ThreatModel
 from src.data_pipeline.ingestion import parse_training_data
+from src.ml_model import ThreatModel
 
 app = FastAPI(title="AI-Driven Cybersecurity Backend")
+
+# WebSocket manager (real-time dashboard)
+from ws_manager import ws_manager
 
 # --------- Configuration ---------
 SUPABASE_URL = os.environ.get("SUPABASE_URL")
 SUPABASE_KEY = os.environ.get("SUPABASE_KEY")
-SAMBANOVA_API_KEY = os.environ.get("SAMBANOVA_API_KEY")
+GEMINI_API_KEY = os.environ.get("GEMINI_API_KEY")
 
-# Configure OpenAI to use Sambanova
-if SAMBANOVA_API_KEY:
-    openai.api_key = SAMBANOVA_API_KEY
-    openai.api_base = "https://api.sambanova.ai/v1"
-    os.environ["OPENAI_API_KEY"] = SAMBANOVA_API_KEY
-else:
-    # Fallback to standard OpenAI if defined
-    OPENAI_API_KEY = os.environ.get("OPENAI_API_KEY")
-    if OPENAI_API_KEY:
-        openai.api_key = OPENAI_API_KEY
-        
-# Set a default model if not using Sambanova, agents might need updates
-MODEL_NAME = "Meta-Llama-3.1-8B-Instruct" if SAMBANOVA_API_KEY else "davinci-codex"
+if not GEMINI_API_KEY:
+    raise RuntimeError("GEMINI_API_KEY not found in environment")
+
+import google.genai as genai
+client = genai.Client(api_key=GEMINI_API_KEY)
+
+# --------- Gemini Helper ---------
+def gemini_generate(prompt: str) -> str:
+    try:
+        response = client.models.generate_content(
+            model="gemini-1.5-flash",
+            contents=prompt
+        )
+        return response.text.strip()
+    except Exception as e:
+        print("Gemini error:", e)
+        return "AI analysis unavailable"
 
 threat_model = ThreatModel()
 supabase: Client = None
@@ -83,7 +90,24 @@ class ActivityLog(BaseModel):
 
 # --------- Logic Helpers ---------
 def log_activity(type: str, message: str, agent_name: str):
-    if not supabase: return
+    payload = {
+        "event": "activity",
+        "type": type,
+        "message": message,
+        "agent_name": agent_name,
+        "timestamp": datetime.utcnow().isoformat()
+    }
+
+    # Send real-time update (best-effort)
+    try:
+        asyncio.create_task(ws_manager.broadcast(payload))
+    except RuntimeError:
+        pass
+
+    # Persist to DB
+    if not supabase:
+        return
+
     try:
         supabase.table("system_activities").insert({
             "type": type,
@@ -91,7 +115,7 @@ def log_activity(type: str, message: str, agent_name: str):
             "agent_name": agent_name
         }).execute()
     except Exception as e:
-        print(f"Activity Log Error: {e}")
+        print("Activity Log Error:", e)
 
 # --------- Endpoints ---------
 
@@ -200,6 +224,17 @@ async def threat_detect(req: ThreatDetectRequest):
          
     # 3. Log Threats & Update Activity
     if threats:
+        # Broadcast threat alert to dashboard (async best-effort)
+        try:
+            asyncio.create_task(ws_manager.broadcast({
+                "event": "threat",
+                "source_ip": req.source_ip,
+                "protocol": req.protocol,
+                "threats": threats,
+                "timestamp": datetime.utcnow().isoformat()
+            }))
+        except RuntimeError:
+            pass
         for t in threats:
             if supabase and traffic_id:
                 try:
@@ -325,3 +360,14 @@ def get_agent_logs(agent_name: str = None):
     except Exception as e:
         print(f"Fetch Agent Logs Error: {e}")
         return []
+
+
+@app.websocket("/ws/dashboard")
+async def dashboard_ws(websocket: WebSocket):
+    await ws_manager.connect(websocket)
+    try:
+        while True:
+            # Keep the connection alive; frontend may send pings
+            await websocket.receive_text()
+    except WebSocketDisconnect:
+        ws_manager.disconnect(websocket)
