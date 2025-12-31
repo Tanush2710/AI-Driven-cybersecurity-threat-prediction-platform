@@ -1,78 +1,46 @@
-import gymnasium as gym
-import ray
-import json
+from fastapi import FastAPI
+from fastapi.middleware.cors import CORSMiddleware
 import warnings
-import time
-import asyncio
 
-try:
-    from ws_manager import ws_manager
-except Exception:
-    ws_manager = None
+# Suppress warnings
+import sys
+if sys.version_info < (3, 10):
+    try:
+        import importlib.metadata
+        import importlib_metadata
+        if not hasattr(importlib.metadata, "packages_distributions"):
+            importlib.metadata.packages_distributions = importlib_metadata.packages_distributions
+    except ImportError:
+        pass
 
 warnings.filterwarnings("ignore", category=FutureWarning)
+warnings.filterwarnings("ignore", category=UserWarning)
 
-# System Initialization
-def initialize_system():
-    # Gym environment
-    env = gym.make("CartPole-v1")
+from src.routers import dashboard, analysis, chat
 
-    # Ray
-    ray.init(ignore_reinit_error=True)
-    return env, None, None
+app = FastAPI(title="CyberSpy API", description="Modular Threat Detection Backend")
 
+app.add_middleware(
+    CORSMiddleware,
+    allow_origins=["*"],
+    allow_credentials=True,
+    allow_methods=["*"],
+    allow_headers=["*"],
+)
 
-# Agent Policy (TEMPORARY DUMMY)
-def integrate_gym_agent(env):
-    action_space = env.action_space
+app.include_router(dashboard.router, prefix="/api/dashboard", tags=["Dashboard"])
+app.include_router(dashboard.router, prefix="/api", tags=["Legacy/Stream"]) # Map /ws/stream and /network to root api namespace if needed or keep structure
+app.include_router(dashboard.router, prefix="", tags=["Root Stream"]) 
+app.include_router(analysis.router, prefix="/api/analyze", tags=["Analysis"])
+app.include_router(chat.router, prefix="/api/chat", tags=["Chat"])
 
-    def agent_policy(_observation):
-        # Random policy (safe placeholder)
-        return action_space.sample()
+@app.get("/")
+def health_check():
+    return {"status": "CyberSpy Core Active", "version": "2.0.0"}
 
-    return agent_policy
-
-
-# Communication Layer
-def implement_communication_protocols(context, channel):
-    # Legacy function kept for compatibility; do best-effort WS broadcast
-    def send_message(message: str):
-        payload = {"event": "system", "payload": message}
-        if ws_manager:
-            try:
-                asyncio.create_task(ws_manager.broadcast(payload))
-                return
-            except Exception:
-                pass
-
-        print("send_message fallback:", message)
-
-    return send_message
-
-
-# Main Entry Point
-if __name__ == "__main__":
-    env, context, channel = initialize_system()
-    agent_policy = integrate_gym_agent(env)
-    send_message = implement_communication_protocols(context, channel)
-
-    # Gymnasium reset API (correct)
-    observation, info = env.reset()
-
-    action = agent_policy(observation)
-
-    payload = {
-    "observation": observation.tolist(),
-    "action": int(action),
-}
-
-    send_message(json.dumps(payload))
-
-print("System running — press Ctrl+C to stop")
-
-try:
-    while True:
-        time.sleep(1)
-except KeyboardInterrupt:
-    print("Shutdown requested")
-    
+# Re-map legacy routes to keep frontend compatible without major refactor
+# Frontend expects:
+# /api/dashboard/stats -> (handled by first include)
+# /api/network/scan -> (handled by dashboard router under /api/network because I added it there)
+# /api/analyze/file -> (handled by analysis router)
+# /ws/stream -> (handled by dashboard router)

@@ -1,9 +1,6 @@
-# virtual environment
-.venv/   
-__pycache__/ 
+backend/.env
+backend/venv
+frontend/node_modules 
 
-# Environment variables file
-.env 
-
-# Schema file
-schema.sql
+# python cache files
+__pycache__       
